@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AxisTrade — Platform Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://www.axistradeafrica.com/axislogo.svg" type="image/svg+xml">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0a0a0a; --sidebar-bg: #0f0f0f; --card: #151515; --card-hover: #1a1a1a;
+      --white: #fff; --gray-300: #d1d5dc; --gray-400: #99a1af; --gray-500: #6a7282;
+      --gray-600: #4a5565; --gray-700: #364153; --gray-800: #1f2937;
+      --border: rgba(255,255,255,0.08); --border-light: rgba(255,255,255,0.05);
+      --orange: #E97A02; --orange-dim: rgba(233,122,2,0.15); --orange-glow: rgba(233,122,2,0.25);
+      --teal: #075073; --teal-dim: rgba(7,80,115,0.2);
+      --green: #22c55e; --green-dim: rgba(34,197,94,0.12);
+      --red: #ef4444; --red-dim: rgba(239,68,68,0.12);
+      --yellow: #eab308; --yellow-dim: rgba(234,179,8,0.12);
+      --blue: #3b82f6; --blue-dim: rgba(59,130,246,0.12);
+      --text-muted: #b0b0b0; --radius: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--white); line-height:1.5; -webkit-font-smoothing:antialiased; display:flex; min-height:100vh; }
+
+    /* ── Ticker ── */
+    .ticker-bar { position:fixed; top:0; left:0; right:0; z-index:1001; background:#0d0d0d; border-bottom:1px solid var(--border); height:32px; overflow:hidden; }
+    .ticker-track { display:flex; align-items:center; height:100%; animation:tickerScroll 40s linear infinite; white-space:nowrap; }
+    .ticker-item { display:inline-flex; align-items:center; gap:6px; padding:0 24px; font-size:0.72rem; font-weight:500; }
+    .ticker-name { color:var(--gray-400); }
+    .ticker-price { color:var(--white); font-weight:700; }
+    .ticker-change { font-weight:600; }
+    .ticker-change.up { color:var(--green); }
+    .ticker-change.down { color:var(--red); }
+    @keyframes tickerScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* ── Demo Banner ── */
+    .demo-banner { position:fixed; top:32px; left:0; right:0; z-index:1000; background:linear-gradient(90deg,var(--orange),#d4690a); text-align:center; padding:8px 20px; font-size:0.8rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:12px; }
+    .demo-banner a { background:rgba(0,0,0,0.25); color:var(--white); padding:3px 12px; border-radius:6px; text-decoration:none; font-size:0.75rem; font-weight:600; transition:background 0.2s; }
+    .demo-banner a:hover { background:rgba(0,0,0,0.4); }
+
+    /* ── Role Switcher ── */
+    .role-switcher { position:fixed; top:72px; left:0; right:0; z-index:999; background:rgba(10,10,10,0.95); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:center; gap:4px; padding:8px; }
+    .role-btn { padding:8px 24px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; border:1px solid var(--border); background:transparent; color:var(--gray-400); transition:all 0.2s; font-family:inherit; }
+    .role-btn.active-buyer { background:var(--teal-dim); color:#0ea5e9; border-color:rgba(7,80,115,0.5); }
+    .role-btn.active-supplier { background:var(--orange-dim); color:var(--orange); border-color:rgba(233,122,2,0.4); }
+    .role-label { font-size:0.7rem; color:var(--gray-500); margin-right:8px; text-transform:uppercase; letter-spacing:0.08em; font-weight:600; }
+
+    /* ── Sidebar ── */
+    .sidebar { width:240px; background:var(--sidebar-bg); border-right:1px solid var(--border); position:fixed; top:112px; left:0; bottom:0; padding:20px 0; display:flex; flex-direction:column; z-index:100; overflow-y:auto; }
+    .sidebar-logo { display:flex; align-items:center; gap:10px; padding:0 20px; margin-bottom:28px; text-decoration:none; color:var(--white); font-weight:700; font-size:1.1rem; }
+    .sidebar-section { font-size:0.63rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--gray-500); padding:0 20px; margin:18px 0 6px; }
+    .sidebar-link { display:flex; align-items:center; gap:12px; padding:9px 20px; color:var(--gray-400); text-decoration:none; font-size:0.85rem; font-weight:500; transition:all 0.15s; cursor:pointer; border-left:3px solid transparent; }
+    .sidebar-link:hover { color:var(--white); background:rgba(255,255,255,0.03); }
+    .sidebar-link.active { color:var(--orange); background:var(--orange-dim); border-left-color:var(--orange); }
+    .sidebar-link svg { width:18px; height:18px; flex-shrink:0; }
+    .sidebar-badge { margin-left:auto; background:var(--orange); color:var(--white); font-size:0.63rem; font-weight:700; padding:2px 7px; border-radius:10px; }
+    .sidebar-bottom { margin-top:auto; padding:0 20px; }
+    .sidebar-user { display:flex; align-items:center; gap:10px; padding:12px; background:rgba(255,255,255,0.03); border-radius:var(--radius); border:1px solid var(--border); }
+    .sidebar-avatar { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0; }
+    .sidebar-avatar.buyer-av { background:linear-gradient(135deg,var(--teal),#0ea5e9); }
+    .sidebar-avatar.supplier-av { background:linear-gradient(135deg,var(--orange),#e69500); }
+    .sidebar-user-name { font-size:0.8rem; font-weight:600; }
+    .sidebar-user-role { font-size:0.7rem; color:var(--gray-500); }
+
+    /* ── Main ── */
+    .main { flex:1; margin-left:240px; margin-top:112px; padding:28px 32px; min-height:calc(100vh - 112px); }
+
+    /* ── Page Header ── */
+    .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px; }
+    .page-header h1 { font-size:1.4rem; font-weight:700; }
+    .page-header-sub { font-size:0.82rem; color:var(--gray-500); margin-top:3px; }
+    .header-actions { display:flex; gap:10px; }
+    .btn { padding:9px 18px; border-radius:8px; font-size:0.82rem; font-weight:600; font-family:inherit; cursor:pointer; border:none; transition:all 0.2s; }
+    .btn-primary { background:var(--orange); color:var(--white); box-shadow:0 0 20px var(--orange-glow); }
+    .btn-primary:hover { box-shadow:0 0 30px rgba(233,122,2,0.4); }
+    .btn-teal { background:var(--teal); color:var(--white); box-shadow:0 0 20px rgba(7,80,115,0.3); }
+    .btn-outline { background:transparent; color:var(--gray-300); border:1px solid var(--border); }
+    .btn-outline:hover { border-color:rgba(255,255,255,0.2); }
+
+    /* ── Views ── */
+    .view { display:none; }
+    .view.active { display:block; }
+
+    /* ── Stats ── */
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:28px; }
+    .stat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:18px 22px; }
+    .stat-label { font-size:0.7rem; color:var(--gray-500); font-weight:500; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; }
+    .stat-value { font-size:1.6rem; font-weight:800; line-height:1; }
+    .stat-value.orange { color:var(--orange); } .stat-value.green { color:var(--green); } .stat-value.blue { color:var(--blue); } .stat-value.teal { color:#0ea5e9; }
+    .stat-change { font-size:0.72rem; margin-top:5px; }
+    .stat-change.up { color:var(--green); } .stat-change.down { color:var(--red); }
+
+    /* ── Cards ── */
+    .card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:14px; }
+    .card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+    .card-header h3 { font-size:0.95rem; font-weight:600; }
+
+    /* ── Grids ── */
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+
+    /* ── Table ── */
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; }
+    th { text-align:left; padding:9px 14px; font-size:0.68rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:var(--gray-500); border-bottom:1px solid var(--border); }
+    td { padding:12px 14px; font-size:0.82rem; border-bottom:1px solid var(--border-light); vertical-align:middle; }
+    tr:hover td { background:rgba(255,255,255,0.02); }
+
+    /* ── Badges ── */
+    .badge { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:100px; font-size:0.68rem; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; }
+    .badge-green { background:var(--green-dim); color:var(--green); }
+    .badge-orange { background:var(--orange-dim); color:var(--orange); }
+    .badge-yellow { background:var(--yellow-dim); color:var(--yellow); }
+    .badge-red { background:var(--red-dim); color:var(--red); }
+    .badge-blue { background:var(--blue-dim); color:var(--blue); }
+    .badge-gray { background:rgba(255,255,255,0.06); color:var(--gray-400); }
+    .badge-teal { background:var(--teal-dim); color:#0ea5e9; }
+    .badge-dot { width:6px; height:6px; border-radius:50%; }
+    .badge-green .badge-dot { background:var(--green); }
+    .badge-orange .badge-dot { background:var(--orange); }
+    .badge-yellow .badge-dot { background:var(--yellow); }
+
+    /* ── Activity ── */
+    .activity-item { display:flex; gap:12px; padding:11px 0; border-bottom:1px solid var(--border-light); }
+    .activity-item:last-child { border-bottom:none; }
+    .activity-dot { width:8px; height:8px; border-radius:50%; margin-top:6px; flex-shrink:0; }
+    .activity-dot.orange { background:var(--orange); } .activity-dot.green { background:var(--green); } .activity-dot.blue { background:var(--blue); } .activity-dot.teal { background:#0ea5e9; }
+    .activity-text { font-size:0.78rem; color:var(--gray-300); }
+    .activity-text strong { color:var(--white); font-weight:600; }
+    .activity-time { font-size:0.68rem; color:var(--gray-600); margin-top:2px; }
+
+    /* ── Milestones ── */
+    .milestone-track { display:flex; align-items:center; gap:0; margin:20px 0; position:relative; }
+    .milestone { flex:1; text-align:center; position:relative; z-index:1; }
+    .milestone-dot { width:30px; height:30px; border-radius:50%; margin:0 auto 6px; display:flex; align-items:center; justify-content:center; font-size:0.62rem; font-weight:700; border:2px solid var(--border); background:var(--card); }
+    .milestone.done .milestone-dot { background:var(--green); border-color:var(--green); color:var(--white); }
+    .milestone.active .milestone-dot { background:var(--orange); border-color:var(--orange); color:var(--white); box-shadow:0 0 14px var(--orange-glow); }
+    .milestone-label { font-size:0.68rem; color:var(--gray-500); }
+    .milestone.done .milestone-label { color:var(--green); }
+    .milestone.active .milestone-label { color:var(--orange); font-weight:600; }
+    .milestone-line { position:absolute; top:15px; left:0; right:0; height:2px; background:var(--border); z-index:0; }
+    .milestone-line-fill { height:100%; background:var(--green); }
+
+    /* ── Escrow ── */
+    .escrow-visual { background:linear-gradient(135deg,rgba(233,122,2,0.06),rgba(7,80,115,0.06)); border:1px solid rgba(233,122,2,0.15); border-radius:var(--radius); padding:24px; text-align:center; margin-bottom:14px; }
+    .escrow-amount { font-size:2.2rem; font-weight:800; color:var(--orange); }
+    .escrow-label { font-size:0.82rem; color:var(--gray-400); margin-top:3px; }
+    .escrow-stages { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px; }
+    .escrow-stage { background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center; }
+    .escrow-stage.released { border-color:rgba(34,197,94,0.3); background:var(--green-dim); }
+    .escrow-stage.locked { border-color:rgba(233,122,2,0.3); background:var(--orange-dim); }
+    .escrow-stage-amount { font-size:1rem; font-weight:700; }
+    .escrow-stage.released .escrow-stage-amount { color:var(--green); }
+    .escrow-stage.locked .escrow-stage-amount { color:var(--orange); }
+    .escrow-stage-label { font-size:0.68rem; color:var(--gray-500); margin-top:2px; }
+    .escrow-stage-status { font-size:0.63rem; font-weight:600; margin-top:4px; }
+    .escrow-stage.released .escrow-stage-status { color:var(--green); }
+    .escrow-stage.locked .escrow-stage-status { color:var(--orange); }
+
+    /* ── Listings ── */
+    .listing-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:22px; transition:all 0.2s; cursor:pointer; }
+    .listing-card:hover { border-color:rgba(233,122,2,0.3); transform:translateY(-2px); }
+    .listing-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .listing-commodity { font-size:0.95rem; font-weight:700; }
+    .listing-meta { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+    .listing-meta-item { font-size:0.72rem; color:var(--gray-400); background:rgba(255,255,255,0.04); padding:3px 9px; border-radius:6px; }
+    .listing-footer { display:flex; align-items:center; justify-content:space-between; padding-top:14px; border-top:1px solid var(--border-light); }
+    .listing-supplier { display:flex; align-items:center; gap:8px; }
+    .listing-supplier-avatar { width:24px; height:24px; border-radius:50%; background:var(--orange-dim); color:var(--orange); display:flex; align-items:center; justify-content:center; font-size:0.58rem; font-weight:700; }
+    .listing-supplier-name { font-size:0.78rem; color:var(--gray-300); }
+    .listing-score { font-size:0.72rem; font-weight:700; color:var(--orange); }
+    .listing-price { font-size:1.15rem; font-weight:800; }
+    .listing-price-unit { font-size:0.72rem; color:var(--gray-500); font-weight:400; }
+
+    /* ── Compliance ── */
+    .compliance-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-light); }
+    .compliance-item:last-child { border-bottom:none; }
+    .compliance-icon { width:34px; height:34px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:700; }
+    .compliance-icon.pass { background:var(--green-dim); color:var(--green); }
+    .compliance-icon.pending { background:var(--yellow-dim); color:var(--yellow); }
+    .compliance-name { font-size:0.82rem; font-weight:600; }
+    .compliance-desc { font-size:0.72rem; color:var(--gray-500); }
+
+    /* ── Trust Ring ── */
+    .trust-ring { width:100px; height:100px; border-radius:50%; margin:0 auto 10px; border:4px solid var(--orange); display:flex; align-items:center; justify-content:center; flex-direction:column; background:var(--orange-dim); }
+    .trust-ring-num { font-size:1.6rem; font-weight:800; color:var(--orange); line-height:1; }
+    .trust-ring-label { font-size:0.55rem; color:var(--gray-400); text-transform:uppercase; letter-spacing:0.05em; }
+
+    /* ── Doc Item ── */
+    .doc-item { display:flex; align-items:center; gap:12px; padding:9px 12px; background:rgba(255,255,255,0.02); border:1px solid var(--border-light); border-radius:8px; margin-bottom:7px; cursor:pointer; transition:all 0.15s; }
+    .doc-item:hover { border-color:var(--border); background:rgba(255,255,255,0.04); }
+    .doc-icon { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:0.68rem; font-weight:700; background:var(--blue-dim); color:var(--blue); }
+    .doc-name { font-size:0.82rem; font-weight:500; }
+    .doc-meta { font-size:0.68rem; color:var(--gray-500); }
+    .doc-status { margin-left:auto; }
+
+    /* ── Market View ── */
+    .market-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+    .market-card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+    .market-commodity { font-size:1rem; font-weight:700; }
+    .market-price { font-size:1.4rem; font-weight:800; }
+    .market-change { font-size:0.82rem; font-weight:600; margin-top:2px; }
+    .market-change.up { color:var(--green); }
+    .market-change.down { color:var(--red); }
+    .market-details { display:flex; gap:16px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border-light); }
+    .market-detail { flex:1; }
+    .market-detail-label { font-size:0.65rem; color:var(--gray-500); text-transform:uppercase; letter-spacing:0.04em; }
+    .market-detail-value { font-size:0.85rem; font-weight:600; margin-top:2px; }
+    .sparkline { display:flex; align-items:flex-end; gap:2px; height:40px; margin-top:10px; }
+    .spark-bar { width:100%; border-radius:2px 2px 0 0; min-height:4px; transition:height 0.3s; }
+    .spark-bar.up { background:var(--green); }
+    .spark-bar.down { background:var(--red); }
+    .market-pulse { display:inline-flex; align-items:center; gap:6px; font-size:0.7rem; color:var(--green); font-weight:600; }
+    .market-pulse-dot { width:8px; height:8px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* ── Supplier: Manage Listing ── */
+    .listing-manage { display:flex; align-items:center; gap:12px; padding:14px; background:rgba(255,255,255,0.02); border:1px solid var(--border-light); border-radius:10px; margin-bottom:10px; transition:all 0.15s; }
+    .listing-manage:hover { border-color:var(--border); }
+    .listing-manage-icon { width:40px; height:40px; border-radius:10px; background:var(--orange-dim); color:var(--orange); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+    .listing-manage-info { flex:1; }
+    .listing-manage-name { font-size:0.88rem; font-weight:600; }
+    .listing-manage-detail { font-size:0.72rem; color:var(--gray-500); }
+
+    /* ── Progress Bars ── */
+    .progress-row { margin-bottom:12px; }
+    .progress-label { display:flex; justify-content:space-between; font-size:0.78rem; margin-bottom:4px; }
+    .progress-bar { height:6px; border-radius:3px; background:rgba(255,255,255,0.06); overflow:hidden; }
+    .progress-fill { height:100%; border-radius:3px; }
+    .progress-fill.green { background:var(--green); }
+    .progress-fill.orange { background:var(--orange); }
+
+    /* ── Inquiry Card ── */
+    .inquiry-card { background:rgba(7,80,115,0.08); border:1px solid rgba(7,80,115,0.2); border-radius:var(--radius); padding:18px; margin-bottom:10px; }
+    .inquiry-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .inquiry-buyer { display:flex; align-items:center; gap:10px; }
+    .inquiry-avatar { width:32px; height:32px; border-radius:50%; background:var(--teal-dim); color:#0ea5e9; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; }
+    .inquiry-name { font-size:0.88rem; font-weight:600; }
+    .inquiry-company { font-size:0.72rem; color:var(--gray-500); }
+    .inquiry-body { font-size:0.82rem; color:var(--gray-300); margin-bottom:12px; line-height:1.6; }
+    .inquiry-footer { display:flex; align-items:center; gap:10px; }
+
+    /* ── Responsive ── */
+    @media (max-width:1024px) { .stats-grid{grid-template-columns:repeat(2,1fr)} .grid-2,.grid-3{grid-template-columns:1fr} .escrow-stages{grid-template-columns:1fr} }
+    @media (max-width:768px) { .sidebar{display:none} .main{margin-left:0} .stats-grid{grid-template-columns:1fr} .milestone-track{flex-direction:column;align-items:flex-start;gap:6px} .milestone-line{display:none} }
+  </style>
+</head>
+<body>
+
+<!-- ═══ Live Commodity Ticker ═══ -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker">
+    <span class="ticker-item"><span class="ticker-name">XAU Gold</span><span class="ticker-price" id="t-gold">$2,178.40</span><span class="ticker-change up" id="tc-gold">+1.24%</span></span>
+    <span class="ticker-item"><span class="ticker-name">Chrome Ore 42%</span><span class="ticker-price" id="t-chrome">$282.00</span><span class="ticker-change up" id="tc-chrome">+0.71%</span></span>
+    <span class="ticker-item"><span class="ticker-name">HG Copper</span><span class="ticker-price" id="t-copper">$8,942.50</span><span class="ticker-change down" id="tc-copper">-0.38%</span></span>
+    <span class="ticker-item"><span class="ticker-name">Manganese Ore</span><span class="ticker-price" id="t-mang">$5.22</span><span class="ticker-change up" id="tc-mang">+2.14%</span></span>
+    <span class="ticker-item"><span class="ticker-name">Lithium Carbonate</span><span class="ticker-price" id="t-lith">$12,350</span><span class="ticker-change up" id="tc-lith">+0.93%</span></span>
+    <span class="ticker-item"><span class="ticker-name">Cobalt</span><span class="ticker-price" id="t-cobalt">$33,580</span><span class="ticker-change down" id="tc-cobalt">-0.52%</span></span>
+    <span class="ticker-item"><span class="ticker-name">PGM Platinum</span><span class="ticker-price" id="t-plat">$1,024.60</span><span class="ticker-change up" id="tc-plat">+0.87%</span></span>
+    <span class="ticker-item"><span class="ticker-name">Iron Ore 62%</span><span class="ticker-price" id="t-iron">$108.75</span><span class="ticker-change down" id="tc-iron">-1.02%</span></span>
+    <!-- duplicate for seamless scroll -->
+    <span class="ticker-item"><span class="ticker-name">XAU Gold</span><span class="ticker-price">$2,178.40</span><span class="ticker-change up">+1.24%</span></span>
+    <span class="ticker-item"><span class="ticker-name">Chrome Ore 42%</span><span class="ticker-price">$282.00</span><span class="ticker-change up">+0.71%</span></span>
+    <span class="ticker-item"><span class="ticker-name">HG Copper</span><span class="ticker-price">$8,942.50</span><span class="ticker-change down">-0.38%</span></span>
+    <span class="ticker-item"><span class="ticker-name">Manganese Ore</span><span class="ticker-price">$5.22</span><span class="ticker-change up">+2.14%</span></span>
+    <span class="ticker-item"><span class="ticker-name">Lithium Carbonate</span><span class="ticker-price">$12,350</span><span class="ticker-change up">+0.93%</span></span>
+    <span class="ticker-item"><span class="ticker-name">Cobalt</span><span class="ticker-price">$33,580</span><span class="ticker-change down">-0.52%</span></span>
+    <span class="ticker-item"><span class="ticker-name">PGM Platinum</span><span class="ticker-price">$1,024.60</span><span class="ticker-change up">+0.87%</span></span>
+    <span class="ticker-item"><span class="ticker-name">Iron Ore 62%</span><span class="ticker-price">$108.75</span><span class="ticker-change down">-1.02%</span></span>
+  </div>
+</div>
+
+<!-- ═══ Demo Banner ═══ -->
+<div class="demo-banner">
+  Interactive Product Demo
+  <a href="index.html">Back to Waitlist</a>
+  <a href="index.html#waitlist">Join Now</a>
+</div>
+
+<!-- ═══ Role Switcher ═══ -->
+<div class="role-switcher">
+  <span class="role-label">View as:</span>
+  <button class="role-btn active-buyer" id="btn-buyer" onclick="switchRole('buyer')">Buyer</button>
+  <button class="role-btn" id="btn-supplier" onclick="switchRole('supplier')">Supplier</button>
+</div>
+
+<!-- ═════════════════════════════════ -->
+<!-- ═══      BUYER SIDEBAR        ═══ -->
+<!-- ═════════════════════════════════ -->
+<aside class="sidebar" id="sidebar-buyer">
+  <a href="#" class="sidebar-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 438" fill="none" style="width:28px;height:20px;"><path d="M 424.258 190.157 A 146 146 0 1 1 314.843 80.742" stroke="#FFFFFF" stroke-width="44" stroke-linecap="butt"/><path d="M405 93 L358 107 L384 114 L388 139 Z" fill="#E97A02"/></svg>
+    AxisTrade
+  </a>
+  <div class="sidebar-section">Overview</div>
+  <a class="sidebar-link active" data-view="b-dashboard" data-role="buyer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </a>
+  <div class="sidebar-section">Procurement</div>
+  <a class="sidebar-link" data-view="b-marketplace" data-role="buyer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    Marketplace
+    <span class="sidebar-badge">24</span>
+  </a>
+  <a class="sidebar-link" data-view="b-deals" data-role="buyer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+    My Purchases
+    <span class="sidebar-badge">3</span>
+  </a>
+  <a class="sidebar-link" data-view="b-escrow" data-role="buyer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/></svg>
+    Escrow
+  </a>
+  <div class="sidebar-section">Trust</div>
+  <a class="sidebar-link" data-view="b-passports" data-role="buyer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+    Supplier Passports
+  </a>
+  <div class="sidebar-section">Market</div>
+  <a class="sidebar-link" data-view="b-market" data-role="buyer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+    Live Market
+  </a>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar buyer-av">GB</div>
+      <div><div class="sidebar-user-name">GoldBridge Trading</div><div class="sidebar-user-role">Buyer &middot; Procurement</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═════════════════════════════════ -->
+<!-- ═══    SUPPLIER SIDEBAR       ═══ -->
+<!-- ═════════════════════════════════ -->
+<aside class="sidebar" id="sidebar-supplier" style="display:none">
+  <a href="#" class="sidebar-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 438" fill="none" style="width:28px;height:20px;"><path d="M 424.258 190.157 A 146 146 0 1 1 314.843 80.742" stroke="#FFFFFF" stroke-width="44" stroke-linecap="butt"/><path d="M405 93 L358 107 L384 114 L388 139 Z" fill="#E97A02"/></svg>
+    AxisTrade
+  </a>
+  <div class="sidebar-section">Overview</div>
+  <a class="sidebar-link active" data-view="s-dashboard" data-role="supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </a>
+  <div class="sidebar-section">Sales</div>
+  <a class="sidebar-link" data-view="s-listings" data-role="supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M9 9h6v6H9z"/></svg>
+    My Listings
+    <span class="sidebar-badge">4</span>
+  </a>
+  <a class="sidebar-link" data-view="s-inquiries" data-role="supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Buyer Inquiries
+    <span class="sidebar-badge">5</span>
+  </a>
+  <a class="sidebar-link" data-view="s-deals" data-role="supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+    My Sales
+    <span class="sidebar-badge">3</span>
+  </a>
+  <a class="sidebar-link" data-view="s-escrow" data-role="supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/></svg>
+    Incoming Payments
+  </a>
+  <div class="sidebar-section">Trust</div>
+  <a class="sidebar-link" data-view="s-passport" data-role="supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+    My Trust Passport
+  </a>
+  <a class="sidebar-link" data-view="s-compliance" data-role="supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+    Compliance
+  </a>
+  <div class="sidebar-section">Market</div>
+  <a class="sidebar-link" data-view="s-market" data-role="supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+    Live Market
+  </a>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar supplier-av">LM</div>
+      <div><div class="sidebar-user-name">Lumina Metals</div><div class="sidebar-user-role">Supplier &middot; Gold</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- ═══         MAIN CONTENT            ═══ -->
+<!-- ═══════════════════════════════════════ -->
+<main class="main">
+
+<!-- ═══════════ BUYER VIEWS ═══════════ -->
+
+<!-- BUYER DASHBOARD -->
+<div class="view active" id="view-b-dashboard">
+  <div class="page-header">
+    <div><h1>Buyer Dashboard</h1><div class="page-header-sub">Welcome back, GoldBridge Trading. Your procurement overview.</div></div>
+    <div class="header-actions">
+      <button class="btn btn-outline" onclick="switchView('b-marketplace')">Browse Suppliers</button>
+      <button class="btn btn-teal">Post Buy Mandate</button>
+    </div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Active Purchases</div><div class="stat-value teal">3</div><div class="stat-change up">+1 this week</div></div>
+    <div class="stat-card"><div class="stat-label">Funds in Escrow</div><div class="stat-value">$1.56M</div><div class="stat-change up">Protected by AxisTrade</div></div>
+    <div class="stat-card"><div class="stat-label">Verified Suppliers Saved</div><div class="stat-value green">12</div><div class="stat-change up">All Trust Score 85+</div></div>
+    <div class="stat-card"><div class="stat-label">Avg. Procurement Time</div><div class="stat-value blue">7.8d</div><div class="stat-change up">-6.2 weeks vs. manual</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><h3>My Active Purchases</h3></div>
+      <table>
+        <thead><tr><th>Deal</th><th>Supplier</th><th>Commodity</th><th>Value</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ATX-2026-041</strong></td><td>Lumina Metals</td><td>Gold</td><td>$1.2M</td><td><span class="badge badge-orange"><span class="badge-dot"></span> In Escrow</span></td></tr>
+          <tr><td><strong>ATX-2026-038</strong></td><td>Katanga Commodities</td><td>Copper</td><td>$360K</td><td><span class="badge badge-green"><span class="badge-dot"></span> Shipped</span></td></tr>
+          <tr><td><strong>ATX-2026-035</strong></td><td>Bikita Lithium</td><td>Lithium</td><td>$180K</td><td><span class="badge badge-yellow"><span class="badge-dot"></span> Assay Pending</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Activity</h3></div>
+      <div class="activity-item"><div class="activity-dot teal"></div><div><div class="activity-text"><strong>Shipment confirmed</strong> — ATX-2026-038 Copper shipment departed Dar es Salaam, ETA Shanghai 14d</div><div class="activity-time">3 hours ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Escrow funded</strong> — $1.2M deposited for Gold purchase from Lumina Metals</div><div class="activity-time">1 day ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot blue"></div><div><div class="activity-text"><strong>Supplier verified</strong> — Lumina Metals Trust Passport confirmed, score 94</div><div class="activity-time">2 days ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot orange"></div><div><div class="activity-text"><strong>New listing match</strong> — 3 new Chrome Ore listings match your saved search criteria</div><div class="activity-time">3 days ago</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BUYER MARKETPLACE -->
+<div class="view" id="view-b-marketplace">
+  <div class="page-header">
+    <div><h1>Marketplace</h1><div class="page-header-sub">Browse verified commodity listings from pre-vetted African suppliers.</div></div>
+    <div class="header-actions"><button class="btn btn-outline">Filter by Commodity</button><button class="btn btn-teal">Post Buy Mandate</button></div>
+  </div>
+  <div class="grid-3">
+    <div class="listing-card">
+      <div class="listing-top"><span class="listing-commodity">Gold (Au 99.5%)</span><span class="badge badge-green"><span class="badge-dot"></span> Verified</span></div>
+      <div class="listing-meta"><span class="listing-meta-item">500 kg</span><span class="listing-meta-item">Limpopo, SA</span><span class="listing-meta-item">FOB Durban</span></div>
+      <div class="listing-price">$62,400 <span class="listing-price-unit">/ kg</span></div>
+      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">LM</div><span class="listing-supplier-name">Lumina Metals</span></div><span class="listing-score">Score: 94</span></div>
+    </div>
+    <div class="listing-card">
+      <div class="listing-top"><span class="listing-commodity">Chrome Ore (42% Cr2O3)</span><span class="badge badge-green"><span class="badge-dot"></span> Verified</span></div>
+      <div class="listing-meta"><span class="listing-meta-item">10,000 MT</span><span class="listing-meta-item">North West, SA</span><span class="listing-meta-item">CIF Shanghai</span></div>
+      <div class="listing-price">$280 <span class="listing-price-unit">/ MT</span></div>
+      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">XM</div><span class="listing-supplier-name">XYZ Mining</span></div><span class="listing-score">Score: 92</span></div>
+    </div>
+    <div class="listing-card">
+      <div class="listing-top"><span class="listing-commodity">Copper Cathode (Grade A)</span><span class="badge badge-green"><span class="badge-dot"></span> Verified</span></div>
+      <div class="listing-meta"><span class="listing-meta-item">2,000 MT</span><span class="listing-meta-item">Katanga, DRC</span><span class="listing-meta-item">FOB Dar es Salaam</span></div>
+      <div class="listing-price">$8,940 <span class="listing-price-unit">/ MT</span></div>
+      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">KC</div><span class="listing-supplier-name">Katanga Commodities</span></div><span class="listing-score">Score: 89</span></div>
+    </div>
+    <div class="listing-card">
+      <div class="listing-top"><span class="listing-commodity">Manganese Ore (44% Mn)</span><span class="badge badge-orange"><span class="badge-dot"></span> Pending Assay</span></div>
+      <div class="listing-meta"><span class="listing-meta-item">5,000 MT</span><span class="listing-meta-item">Gauteng, SA</span><span class="listing-meta-item">FOB Richards Bay</span></div>
+      <div class="listing-price">$5.20 <span class="listing-price-unit">/ dmtu</span></div>
+      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">MF</div><span class="listing-supplier-name">MineFlow SA</span></div><span class="listing-score">Score: 85</span></div>
+    </div>
+    <div class="listing-card">
+      <div class="listing-top"><span class="listing-commodity">Lithium Spodumene (6%)</span><span class="badge badge-green"><span class="badge-dot"></span> Verified</span></div>
+      <div class="listing-meta"><span class="listing-meta-item">1,500 MT</span><span class="listing-meta-item">Bikita, Zimbabwe</span><span class="listing-meta-item">FOB Beira</span></div>
+      <div class="listing-price">$1,200 <span class="listing-price-unit">/ MT</span></div>
+      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">BL</div><span class="listing-supplier-name">Bikita Lithium</span></div><span class="listing-score">Score: 91</span></div>
+    </div>
+    <div class="listing-card">
+      <div class="listing-top"><span class="listing-commodity">Cobalt (99.8% Co)</span><span class="badge badge-green"><span class="badge-dot"></span> Verified</span></div>
+      <div class="listing-meta"><span class="listing-meta-item">200 MT</span><span class="listing-meta-item">Kolwezi, DRC</span><span class="listing-meta-item">CIF Rotterdam</span></div>
+      <div class="listing-price">$33,500 <span class="listing-price-unit">/ MT</span></div>
+      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">CM</div><span class="listing-supplier-name">Congo Minerals</span></div><span class="listing-score">Score: 87</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BUYER DEALS -->
+<div class="view" id="view-b-deals">
+  <div class="page-header">
+    <div><h1>My Purchases — Deal Room</h1><div class="page-header-sub">ATX-2026-041 — Gold purchase from Lumina Metals</div></div>
+    <div class="header-actions"><button class="btn btn-outline">Export</button><button class="btn btn-teal">Message Supplier</button></div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+      <div>
+        <span style="font-size:0.78rem;color:var(--gray-500);font-family:monospace">ATX-2026-041</span>
+        <div style="font-size:1.05rem;font-weight:700;margin-top:4px">Gold (Au 99.5%) — 500 kg</div>
+        <div style="font-size:0.82rem;color:var(--gray-500);margin-top:2px">Total: <strong style="color:var(--white)">$1,200,000</strong> &middot; FOB Durban</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:var(--teal-dim);color:#0ea5e9;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700">GB</div><span style="font-size:0.85rem">You (Buyer)</span></div>
+        <span style="color:var(--gray-600);font-size:0.8rem">&larr;</span>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:var(--orange-dim);color:var(--orange);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700">LM</div><span style="font-size:0.85rem">Lumina Metals</span></div>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="milestone-line"><div class="milestone-line-fill" style="width:35%"></div></div>
+      <div class="milestone-track">
+        <div class="milestone done"><div class="milestone-dot">&#10003;</div><div class="milestone-label">LOI Signed</div></div>
+        <div class="milestone done"><div class="milestone-dot">&#10003;</div><div class="milestone-label">Supplier Verified</div></div>
+        <div class="milestone active"><div class="milestone-dot">3</div><div class="milestone-label">Escrow Funded</div></div>
+        <div class="milestone"><div class="milestone-dot">4</div><div class="milestone-label">Assay (SGS)</div></div>
+        <div class="milestone"><div class="milestone-dot">5</div><div class="milestone-label">Shipment</div></div>
+        <div class="milestone"><div class="milestone-dot">6</div><div class="milestone-label">Settlement</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><h3>Purchase Terms</h3></div>
+      <table><tbody>
+        <tr><td style="color:var(--gray-500);width:42%">Commodity</td><td>Gold (Au 99.5%)</td></tr>
+        <tr><td style="color:var(--gray-500)">Quantity</td><td>500 kg</td></tr>
+        <tr><td style="color:var(--gray-500)">Unit Price</td><td>$62,400/kg (LBMA -0.5%)</td></tr>
+        <tr><td style="color:var(--gray-500)">Escrow</td><td><span style="color:var(--orange);font-weight:600">$1,200,000 locked</span></td></tr>
+        <tr><td style="color:var(--gray-500)">Assay Provider</td><td>SGS South Africa</td></tr>
+        <tr><td style="color:var(--gray-500)">Insurance</td><td>Hollard Marine Cargo</td></tr>
+        <tr><td style="color:var(--gray-500)">Supplier Score</td><td><span style="color:var(--green);font-weight:600">94 — Fully Verified</span></td></tr>
+      </tbody></table>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Document Vault</h3></div>
+      <div class="doc-item"><div class="doc-icon">LOI</div><div><div class="doc-name">Letter of Intent</div><div class="doc-meta">Signed Mar 15</div></div><span class="badge badge-green doc-status">Signed</span></div>
+      <div class="doc-item"><div class="doc-icon">SPA</div><div><div class="doc-name">Sale & Purchase Agreement</div><div class="doc-meta">Signed Mar 17</div></div><span class="badge badge-green doc-status">Signed</span></div>
+      <div class="doc-item"><div class="doc-icon">KYC</div><div><div class="doc-name">Supplier KYC/KYB Docs</div><div class="doc-meta">Verified Mar 18</div></div><span class="badge badge-green doc-status">Verified</span></div>
+      <div class="doc-item"><div class="doc-icon" style="background:var(--yellow-dim);color:var(--yellow)">INS</div><div><div class="doc-name">Cargo Insurance</div><div class="doc-meta">Awaiting cert</div></div><span class="badge badge-orange doc-status">Pending</span></div>
+      <div class="doc-item"><div class="doc-icon" style="background:var(--orange-dim);color:var(--orange)">ASY</div><div><div class="doc-name">Assay Report</div><div class="doc-meta">Awaiting SGS</div></div><span class="badge badge-gray doc-status">Pending</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BUYER ESCROW -->
+<div class="view" id="view-b-escrow">
+  <div class="page-header"><div><h1>Escrow — My Payments</h1><div class="page-header-sub">Your funds are protected until deal milestones are verified.</div></div></div>
+  <div class="escrow-visual">
+    <div class="escrow-label">Your Total Funds in Escrow</div>
+    <div class="escrow-amount">$1,560,000</div>
+    <div class="escrow-stages">
+      <div class="escrow-stage released"><div class="escrow-stage-amount">$180,000</div><div class="escrow-stage-label">ATX-035 Lithium — Deposit</div><div class="escrow-stage-status">&#10003; Released to supplier</div></div>
+      <div class="escrow-stage locked"><div class="escrow-stage-amount">$1,200,000</div><div class="escrow-stage-label">ATX-041 Gold — Full amount</div><div class="escrow-stage-status">&#9679; Awaiting assay verification</div></div>
+      <div class="escrow-stage locked"><div class="escrow-stage-amount">$180,000</div><div class="escrow-stage-label">ATX-038 Copper — Final payment</div><div class="escrow-stage-status">&#9679; Awaiting delivery confirmation</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>Payment History</h3></div>
+    <table>
+      <thead><tr><th>Date</th><th>Deal</th><th>To Supplier</th><th>Amount</th><th>Trigger</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Mar 21</td><td>ATX-2026-041</td><td>Lumina Metals</td><td>$1,200,000</td><td>Full escrow deposit</td><td><span class="badge badge-orange">Locked</span></td></tr>
+        <tr><td>Mar 18</td><td>ATX-2026-038</td><td>Katanga Commodities</td><td>$180,000</td><td>Advance (50%)</td><td><span class="badge badge-green">Released</span></td></tr>
+        <tr><td>Mar 15</td><td>ATX-2026-035</td><td>Bikita Lithium</td><td>$180,000</td><td>Deposit on LOI</td><td><span class="badge badge-green">Released</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- BUYER PASSPORTS -->
+<div class="view" id="view-b-passports">
+  <div class="page-header"><div><h1>Supplier Passports</h1><div class="page-header-sub">Verified Trust Passports for suppliers you're evaluating or transacting with.</div></div></div>
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card" style="text-align:center;padding:28px">
+      <div class="trust-ring"><span class="trust-ring-num">94</span><span class="trust-ring-label">Score</span></div>
+      <h3 style="margin-bottom:3px">Lumina Metals</h3><p style="font-size:0.78rem;color:var(--gray-500);margin-bottom:10px">Limpopo, SA &middot; Gold</p>
+      <span class="badge badge-green" style="font-size:0.72rem"><span class="badge-dot"></span> Fully Verified</span>
+      <div style="margin-top:12px;font-size:0.72rem;color:var(--gray-500)">14 deals &middot; 98.2% delivery rate</div>
+    </div>
+    <div class="card" style="text-align:center;padding:28px">
+      <div class="trust-ring"><span class="trust-ring-num">89</span><span class="trust-ring-label">Score</span></div>
+      <h3 style="margin-bottom:3px">Katanga Commodities</h3><p style="font-size:0.78rem;color:var(--gray-500);margin-bottom:10px">Katanga, DRC &middot; Copper</p>
+      <span class="badge badge-green" style="font-size:0.72rem"><span class="badge-dot"></span> Fully Verified</span>
+      <div style="margin-top:12px;font-size:0.72rem;color:var(--gray-500)">8 deals &middot; 95.1% delivery rate</div>
+    </div>
+    <div class="card" style="text-align:center;padding:28px">
+      <div class="trust-ring" style="border-color:var(--yellow);background:var(--yellow-dim)"><span class="trust-ring-num" style="color:var(--yellow)">85</span><span class="trust-ring-label">Score</span></div>
+      <h3 style="margin-bottom:3px">MineFlow SA</h3><p style="font-size:0.78rem;color:var(--gray-500);margin-bottom:10px">Gauteng, SA &middot; Manganese</p>
+      <span class="badge badge-yellow" style="font-size:0.72rem"><span class="badge-dot"></span> Pending Review</span>
+      <div style="margin-top:12px;font-size:0.72rem;color:var(--gray-500)">3 deals &middot; Mining license pending</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>Lumina Metals — Detailed Passport</h3><span class="badge badge-green">Trusted Supplier</span></div>
+    <div class="grid-2" style="gap:20px">
+      <div>
+        <table><tbody>
+          <tr><td style="color:var(--gray-500);width:45%">Reg. No.</td><td>2019/123456/07</td></tr>
+          <tr><td style="color:var(--gray-500)">Commodity</td><td>Gold (Au)</td></tr>
+          <tr><td style="color:var(--gray-500)">Location</td><td>Limpopo, South Africa</td></tr>
+          <tr><td style="color:var(--gray-500)">Operating</td><td>6 years</td></tr>
+          <tr><td style="color:var(--gray-500)">On-Platform Deals</td><td>14</td></tr>
+          <tr><td style="color:var(--gray-500)">Delivery Reliability</td><td style="color:var(--green);font-weight:600">98.2%</td></tr>
+          <tr><td style="color:var(--gray-500)">Total Transacted</td><td>$12.4M</td></tr>
+        </tbody></table>
+      </div>
+      <div>
+        <div class="progress-row"><div class="progress-label"><span>Compliance</span><span style="color:var(--green);font-weight:600">96</span></div><div class="progress-bar"><div class="progress-fill green" style="width:96%"></div></div></div>
+        <div class="progress-row"><div class="progress-label"><span>Financial Standing</span><span style="color:var(--green);font-weight:600">93</span></div><div class="progress-bar"><div class="progress-fill green" style="width:93%"></div></div></div>
+        <div class="progress-row"><div class="progress-label"><span>Delivery Performance</span><span style="color:var(--green);font-weight:600">98</span></div><div class="progress-bar"><div class="progress-fill green" style="width:98%"></div></div></div>
+        <div class="progress-row"><div class="progress-label"><span>ERP Data Quality</span><span style="color:var(--orange);font-weight:600">89</span></div><div class="progress-bar"><div class="progress-fill orange" style="width:89%"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BUYER LIVE MARKET -->
+<div class="view" id="view-b-market">
+  <div class="page-header"><div><h1>Live Commodity Market</h1><div class="page-header-sub"><span class="market-pulse"><span class="market-pulse-dot"></span> Live</span> &mdash; Prices update in real-time. Last refresh: <span id="b-market-time">just now</span></div></div></div>
+  <div class="grid-3" id="b-market-grid"></div>
+  <div class="card" style="margin-top:14px">
+    <div class="card-header"><h3>Market News</h3></div>
+    <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Gold hits 3-month high</strong> — XAU surges past $2,175 on safe-haven demand amid geopolitical uncertainty</div><div class="activity-time">2 hours ago &middot; Reuters</div></div></div>
+    <div class="activity-item"><div class="activity-dot orange"></div><div><div class="activity-text"><strong>DRC cobalt output up 8% YoY</strong> — Increased production from Kolwezi artisanal and industrial mines pressures spot price</div><div class="activity-time">5 hours ago &middot; Mining Weekly</div></div></div>
+    <div class="activity-item"><div class="activity-dot blue"></div><div><div class="activity-text"><strong>South Africa chrome exports surge</strong> — Strong Chinese demand drives Q1 chrome ore exports up 15% from Richards Bay</div><div class="activity-time">1 day ago &middot; Metal Bulletin</div></div></div>
+    <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Lithium rebound accelerates</strong> — EV demand recovery pushes spodumene prices above $1,200/MT for first time since Nov</div><div class="activity-time">1 day ago &middot; Benchmark Minerals</div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════ SUPPLIER VIEWS ═══════════ -->
+
+<!-- SUPPLIER DASHBOARD -->
+<div class="view" id="view-s-dashboard">
+  <div class="page-header">
+    <div><h1>Supplier Dashboard</h1><div class="page-header-sub">Welcome back, Lumina Metals. Your sales overview.</div></div>
+    <div class="header-actions">
+      <button class="btn btn-outline" onclick="switchView('s-inquiries')">View Inquiries</button>
+      <button class="btn btn-primary">Add New Listing</button>
+    </div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Active Sales</div><div class="stat-value orange">3</div><div class="stat-change up">+1 this week</div></div>
+    <div class="stat-card"><div class="stat-label">Revenue in Escrow</div><div class="stat-value">$1.62M</div><div class="stat-change up">Pending release to you</div></div>
+    <div class="stat-card"><div class="stat-label">Buyer Inquiries</div><div class="stat-value teal">5</div><div class="stat-change up">+3 new this week</div></div>
+    <div class="stat-card"><div class="stat-label">Trust Score</div><div class="stat-value green">94</div><div class="stat-change up">+2 since last quarter</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><h3>My Active Sales</h3></div>
+      <table>
+        <thead><tr><th>Deal</th><th>Buyer</th><th>Commodity</th><th>Value</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ATX-2026-041</strong></td><td>GoldBridge Trading</td><td>Gold</td><td>$1.2M</td><td><span class="badge badge-orange"><span class="badge-dot"></span> Awaiting Assay</span></td></tr>
+          <tr><td><strong>ATX-2026-039</strong></td><td>Pacific Metals</td><td>Gold</td><td>$420K</td><td><span class="badge badge-green"><span class="badge-dot"></span> Payment Released</span></td></tr>
+          <tr><td><strong>ATX-2026-036</strong></td><td>Meridian Resources</td><td>Gold</td><td>$680K</td><td><span class="badge badge-green"><span class="badge-dot"></span> Completed</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Activity</h3></div>
+      <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Payment received</strong> — $420K released from escrow for ATX-2026-039 after SGS assay verification</div><div class="activity-time">2 hours ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot teal"></div><div><div class="activity-text"><strong>New buyer inquiry</strong> — Shandong Gold Group interested in 200kg Gold, requesting quote</div><div class="activity-time">5 hours ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot orange"></div><div><div class="activity-text"><strong>Escrow funded</strong> — GoldBridge Trading deposited $1.2M for ATX-2026-041</div><div class="activity-time">1 day ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot blue"></div><div><div class="activity-text"><strong>Trust Score updated</strong> — Your score increased from 92 to 94 based on delivery performance</div><div class="activity-time">3 days ago</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLIER LISTINGS -->
+<div class="view" id="view-s-listings">
+  <div class="page-header">
+    <div><h1>My Listings</h1><div class="page-header-sub">Manage your active commodity listings on the marketplace.</div></div>
+    <div class="header-actions"><button class="btn btn-primary">Add New Listing</button></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>Active Listings</h3><span class="badge badge-green">4 Live</span></div>
+    <div class="listing-manage">
+      <div class="listing-manage-icon">Au</div>
+      <div class="listing-manage-info"><div class="listing-manage-name">Gold (Au 99.5%) — 500 kg</div><div class="listing-manage-detail">$62,400/kg &middot; FOB Durban &middot; 14 views this week &middot; 3 inquiries</div></div>
+      <span class="badge badge-green">Live</span>
+    </div>
+    <div class="listing-manage">
+      <div class="listing-manage-icon">Au</div>
+      <div class="listing-manage-info"><div class="listing-manage-name">Gold (Au 99.5%) — 200 kg</div><div class="listing-manage-detail">$62,800/kg &middot; FOB Durban &middot; 8 views this week &middot; 1 inquiry</div></div>
+      <span class="badge badge-green">Live</span>
+    </div>
+    <div class="listing-manage">
+      <div class="listing-manage-icon">Au</div>
+      <div class="listing-manage-info"><div class="listing-manage-name">Gold Concentrate (85%) — 2,000 kg</div><div class="listing-manage-detail">$48,200/kg &middot; EXW Mine &middot; 6 views this week &middot; 1 inquiry</div></div>
+      <span class="badge badge-green">Live</span>
+    </div>
+    <div class="listing-manage">
+      <div class="listing-manage-icon" style="background:var(--yellow-dim);color:var(--yellow)">Au</div>
+      <div class="listing-manage-info"><div class="listing-manage-name">Gold Dore Bars — 100 kg</div><div class="listing-manage-detail">$59,100/kg &middot; FOB Durban &middot; Assay report pending upload</div></div>
+      <span class="badge badge-yellow">Draft</span>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><h3>Listing Performance</h3></div>
+      <table><tbody>
+        <tr><td style="color:var(--gray-500)">Total Views (30d)</td><td style="font-weight:600">342</td></tr>
+        <tr><td style="color:var(--gray-500)">Unique Buyer Views</td><td style="font-weight:600">89</td></tr>
+        <tr><td style="color:var(--gray-500)">Inquiries Received</td><td style="font-weight:600;color:var(--orange)">12</td></tr>
+        <tr><td style="color:var(--gray-500)">Conversion Rate</td><td style="font-weight:600;color:var(--green)">13.5%</td></tr>
+        <tr><td style="color:var(--gray-500)">Avg. Response Time</td><td style="font-weight:600">2.4 hours</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Top Buyer Regions</h3></div>
+      <table><tbody>
+        <tr><td style="color:var(--gray-500)">China</td><td style="font-weight:600">38% of inquiries</td></tr>
+        <tr><td style="color:var(--gray-500)">India</td><td style="font-weight:600">22%</td></tr>
+        <tr><td style="color:var(--gray-500)">UAE</td><td style="font-weight:600">15%</td></tr>
+        <tr><td style="color:var(--gray-500)">Europe</td><td style="font-weight:600">14%</td></tr>
+        <tr><td style="color:var(--gray-500)">Rest of Africa</td><td style="font-weight:600">11%</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLIER INQUIRIES -->
+<div class="view" id="view-s-inquiries">
+  <div class="page-header">
+    <div><h1>Buyer Inquiries</h1><div class="page-header-sub">Incoming interest from verified buyers on the platform.</div></div>
+  </div>
+  <div class="inquiry-card">
+    <div class="inquiry-header">
+      <div class="inquiry-buyer"><div class="inquiry-avatar">SG</div><div><div class="inquiry-name">Shandong Gold Group</div><div class="inquiry-company">Shandong, China &middot; Trust Score: 91 &middot; Buyer</div></div></div>
+      <span class="badge badge-teal">New</span>
+    </div>
+    <div class="inquiry-body">Interested in procuring <strong>200 kg Gold (Au 99.5%)</strong> with CIF Shanghai delivery. Looking for Q2 2026 shipment with SGS assay. Can your current stock support this volume?</div>
+    <div class="inquiry-footer"><span style="font-size:0.72rem;color:var(--gray-500)">5 hours ago</span><button class="btn btn-teal" style="padding:6px 14px;font-size:0.78rem">Respond</button><button class="btn btn-outline" style="padding:6px 14px;font-size:0.78rem">View Passport</button></div>
+  </div>
+  <div class="inquiry-card">
+    <div class="inquiry-header">
+      <div class="inquiry-buyer"><div class="inquiry-avatar">GB</div><div><div class="inquiry-name">GoldBridge Trading</div><div class="inquiry-company">Dubai, UAE &middot; Trust Score: 88 &middot; Buyer</div></div></div>
+      <span class="badge badge-green">Deal Started</span>
+    </div>
+    <div class="inquiry-body">Following up on our Gold purchase — ATX-2026-041 is now funded in escrow ($1.2M). Ready for SGS inspection scheduling. What's the earliest availability for assay?</div>
+    <div class="inquiry-footer"><span style="font-size:0.72rem;color:var(--gray-500)">1 day ago</span><button class="btn btn-teal" style="padding:6px 14px;font-size:0.78rem">Respond</button><button class="btn btn-outline" style="padding:6px 14px;font-size:0.78rem">View Deal</button></div>
+  </div>
+  <div class="inquiry-card">
+    <div class="inquiry-header">
+      <div class="inquiry-buyer"><div class="inquiry-avatar">MR</div><div><div class="inquiry-name">Meridian Resources</div><div class="inquiry-company">Mumbai, India &middot; Trust Score: 87 &middot; Buyer</div></div></div>
+      <span class="badge badge-teal">New</span>
+    </div>
+    <div class="inquiry-body">We're sourcing <strong>Gold Concentrate (85%+)</strong> for our refinery. Interested in a recurring monthly offtake of 500 kg. Would you be open to a 6-month supply agreement?</div>
+    <div class="inquiry-footer"><span style="font-size:0.72rem;color:var(--gray-500)">2 days ago</span><button class="btn btn-teal" style="padding:6px 14px;font-size:0.78rem">Respond</button><button class="btn btn-outline" style="padding:6px 14px;font-size:0.78rem">View Passport</button></div>
+  </div>
+  <div class="inquiry-card">
+    <div class="inquiry-header">
+      <div class="inquiry-buyer"><div class="inquiry-avatar">PM</div><div><div class="inquiry-name">Pacific Metals Corp</div><div class="inquiry-company">Hong Kong &middot; Trust Score: 90 &middot; Buyer</div></div></div>
+      <span class="badge badge-green">Completed</span>
+    </div>
+    <div class="inquiry-body">Confirming receipt of ATX-2026-039 shipment. Quality verified. Will leave a performance review on your passport. Looking forward to next deal.</div>
+    <div class="inquiry-footer"><span style="font-size:0.72rem;color:var(--gray-500)">3 days ago</span><button class="btn btn-outline" style="padding:6px 14px;font-size:0.78rem">View Deal</button></div>
+  </div>
+  <div class="inquiry-card">
+    <div class="inquiry-header">
+      <div class="inquiry-buyer"><div class="inquiry-avatar">AF</div><div><div class="inquiry-name">AfriFinance Ltd</div><div class="inquiry-company">Johannesburg, SA &middot; Trade Finance</div></div></div>
+      <span class="badge badge-blue">Finance Offer</span>
+    </div>
+    <div class="inquiry-body">Based on your Trust Score (94) and transaction history, we'd like to offer a <strong>pre-export finance facility up to $2M</strong> at competitive rates. Your AxisTrade passport qualifies you for our fast-track program.</div>
+    <div class="inquiry-footer"><span style="font-size:0.72rem;color:var(--gray-500)">4 days ago</span><button class="btn btn-teal" style="padding:6px 14px;font-size:0.78rem">View Offer</button></div>
+  </div>
+</div>
+
+<!-- SUPPLIER DEALS -->
+<div class="view" id="view-s-deals">
+  <div class="page-header">
+    <div><h1>My Sales — Deal Room</h1><div class="page-header-sub">ATX-2026-041 — Gold sale to GoldBridge Trading</div></div>
+    <div class="header-actions"><button class="btn btn-outline">Export</button><button class="btn btn-primary">Schedule Assay</button></div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+      <div>
+        <span style="font-size:0.78rem;color:var(--gray-500);font-family:monospace">ATX-2026-041</span>
+        <div style="font-size:1.05rem;font-weight:700;margin-top:4px">Gold (Au 99.5%) — 500 kg</div>
+        <div style="font-size:0.82rem;color:var(--gray-500);margin-top:2px">Sale value: <strong style="color:var(--green)">$1,200,000</strong> &middot; Buyer's escrow funded</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:var(--orange-dim);color:var(--orange);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700">LM</div><span style="font-size:0.85rem">You (Seller)</span></div>
+        <span style="color:var(--gray-600);font-size:0.8rem">&rarr;</span>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:var(--teal-dim);color:#0ea5e9;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700">GB</div><span style="font-size:0.85rem">GoldBridge Trading</span></div>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="milestone-line"><div class="milestone-line-fill" style="width:35%"></div></div>
+      <div class="milestone-track">
+        <div class="milestone done"><div class="milestone-dot">&#10003;</div><div class="milestone-label">LOI Signed</div></div>
+        <div class="milestone done"><div class="milestone-dot">&#10003;</div><div class="milestone-label">Your KYC Verified</div></div>
+        <div class="milestone active"><div class="milestone-dot">3</div><div class="milestone-label">Buyer Escrow Funded</div></div>
+        <div class="milestone"><div class="milestone-dot">4</div><div class="milestone-label">SGS Assay</div></div>
+        <div class="milestone"><div class="milestone-dot">5</div><div class="milestone-label">Ship Goods</div></div>
+        <div class="milestone"><div class="milestone-dot">6</div><div class="milestone-label">Get Paid</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(34,197,94,0.06),rgba(7,80,115,0.06));border-color:rgba(34,197,94,0.2)">
+    <div style="text-align:center;padding:12px">
+      <div style="font-size:0.82rem;color:var(--gray-400)">Your payout upon completion</div>
+      <div style="font-size:2rem;font-weight:800;color:var(--green)">$1,200,000</div>
+      <div style="font-size:0.78rem;color:var(--gray-500);margin-top:4px">Next milestone: Schedule SGS assay inspection &rarr; triggers escrow release</div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLIER ESCROW (Incoming) -->
+<div class="view" id="view-s-escrow">
+  <div class="page-header"><div><h1>Incoming Payments</h1><div class="page-header-sub">Track buyer payments locked in escrow and released to you.</div></div></div>
+  <div class="escrow-visual" style="border-color:rgba(34,197,94,0.2);background:linear-gradient(135deg,rgba(34,197,94,0.06),rgba(7,80,115,0.06))">
+    <div class="escrow-label">Total Revenue (Pending + Released)</div>
+    <div class="escrow-amount" style="color:var(--green)">$2,300,000</div>
+    <div class="escrow-stages">
+      <div class="escrow-stage released"><div class="escrow-stage-amount">$420,000</div><div class="escrow-stage-label">ATX-039 — Pacific Metals</div><div class="escrow-stage-status">&#10003; Paid to your account</div></div>
+      <div class="escrow-stage released"><div class="escrow-stage-amount">$680,000</div><div class="escrow-stage-label">ATX-036 — Meridian Resources</div><div class="escrow-stage-status">&#10003; Paid to your account</div></div>
+      <div class="escrow-stage locked"><div class="escrow-stage-amount">$1,200,000</div><div class="escrow-stage-label">ATX-041 — GoldBridge Trading</div><div class="escrow-stage-status">&#9679; Awaiting your assay</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>Payment Ledger</h3></div>
+    <table>
+      <thead><tr><th>Date</th><th>Deal</th><th>From Buyer</th><th>Amount</th><th>Trigger</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Mar 21</td><td>ATX-041</td><td>GoldBridge Trading</td><td>$1,200,000</td><td>Assay verification</td><td><span class="badge badge-orange">In Escrow</span></td></tr>
+        <tr><td>Mar 19</td><td>ATX-039</td><td>Pacific Metals</td><td>$420,000</td><td>Assay verified (SGS)</td><td><span class="badge badge-green">Received</span></td></tr>
+        <tr><td>Mar 10</td><td>ATX-036</td><td>Meridian Resources</td><td>$680,000</td><td>Delivery confirmed</td><td><span class="badge badge-green">Received</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SUPPLIER PASSPORT -->
+<div class="view" id="view-s-passport">
+  <div class="page-header">
+    <div><h1>My Trust Passport</h1><div class="page-header-sub">Your verified profile — this is what buyers and banks see.</div></div>
+    <div class="header-actions"><button class="btn btn-primary">Upload Document</button></div>
+  </div>
+  <div class="grid-2">
+    <div class="card" style="text-align:center;padding:32px">
+      <div class="trust-ring" style="width:120px;height:120px;border-width:5px"><span class="trust-ring-num" style="font-size:2rem">94</span><span class="trust-ring-label">Trust Score</span></div>
+      <h3 style="margin:12px 0 4px">Lumina Metals (Pty) Ltd</h3>
+      <p style="font-size:0.82rem;color:var(--gray-500)">Limpopo, South Africa &middot; Gold</p>
+      <p style="font-size:0.78rem;color:var(--gray-400);margin-top:8px">ATX-ID: ATX-S-2024-001</p>
+      <div style="margin-top:16px"><span class="badge badge-green" style="font-size:0.78rem"><span class="badge-dot"></span> Fully Verified — Bank Ready</span></div>
+      <div style="margin-top:16px;display:flex;justify-content:center;gap:20px;font-size:0.78rem">
+        <div><span style="font-weight:700;color:var(--white)">14</span><span style="color:var(--gray-500)"> deals</span></div>
+        <div><span style="font-weight:700;color:var(--green)">98.2%</span><span style="color:var(--gray-500)"> delivery</span></div>
+        <div><span style="font-weight:700;color:var(--white)">$12.4M</span><span style="color:var(--gray-500)"> volume</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Score Breakdown</h3></div>
+      <div class="progress-row"><div class="progress-label"><span>Compliance & Documentation</span><span style="color:var(--green);font-weight:600">96/100</span></div><div class="progress-bar"><div class="progress-fill green" style="width:96%"></div></div></div>
+      <div class="progress-row"><div class="progress-label"><span>Financial Standing</span><span style="color:var(--green);font-weight:600">93/100</span></div><div class="progress-bar"><div class="progress-fill green" style="width:93%"></div></div></div>
+      <div class="progress-row"><div class="progress-label"><span>Delivery & Performance</span><span style="color:var(--green);font-weight:600">98/100</span></div><div class="progress-bar"><div class="progress-fill green" style="width:98%"></div></div></div>
+      <div class="progress-row"><div class="progress-label"><span>ERP Data Quality</span><span style="color:var(--orange);font-weight:600">89/100</span></div><div class="progress-bar"><div class="progress-fill orange" style="width:89%"></div></div></div>
+      <div style="margin-top:16px;padding:14px;background:var(--orange-dim);border:1px solid rgba(233,122,2,0.2);border-radius:8px;font-size:0.78rem;color:var(--gray-300)">
+        <strong style="color:var(--orange)">Tip:</strong> Upload your latest ERP production reports to boost your score to 96+. Higher scores attract more buyer inquiries.
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="card-header"><h3>Verified Documents</h3></div>
+    <div class="grid-2">
+      <div>
+        <div class="compliance-item"><div class="compliance-icon pass">&#10003;</div><div class="compliance-info"><div class="compliance-name">CIPC Registration</div><div class="compliance-desc">2019/123456/07 — Active, good standing</div></div></div>
+        <div class="compliance-item"><div class="compliance-icon pass">&#10003;</div><div class="compliance-info"><div class="compliance-name">SARS Tax Clearance</div><div class="compliance-desc">Valid through Dec 2026</div></div></div>
+        <div class="compliance-item"><div class="compliance-icon pass">&#10003;</div><div class="compliance-info"><div class="compliance-name">Mining License (DMRE)</div><div class="compliance-desc">LP30/5/1/1/2/123 — Gold, Limpopo</div></div></div>
+      </div>
+      <div>
+        <div class="compliance-item"><div class="compliance-icon pass">&#10003;</div><div class="compliance-info"><div class="compliance-name">Sanctions Screening</div><div class="compliance-desc">Clear on OFAC, EU, UN, SA lists</div></div></div>
+        <div class="compliance-item"><div class="compliance-icon pass">&#10003;</div><div class="compliance-info"><div class="compliance-name">FICA Compliance</div><div class="compliance-desc">All requirements met</div></div></div>
+        <div class="compliance-item"><div class="compliance-icon pass">&#10003;</div><div class="compliance-info"><div class="compliance-name">Environmental Permit</div><div class="compliance-desc">EIA approved, valid through 2028</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLIER COMPLIANCE -->
+<div class="view" id="view-s-compliance">
+  <div class="page-header"><div><h1>Compliance Status</h1><div class="page-header-sub">AI-powered compliance engine — keep your documents current to maintain your Trust Score.</div></div></div>
+  <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat-card"><div class="stat-label">Compliance Score</div><div class="stat-value green">96%</div><div class="stat-change up">All documents current</div></div>
+    <div class="stat-card"><div class="stat-label">Documents Verified</div><div class="stat-value">7 / 7</div><div class="stat-change up">Fully compliant</div></div>
+    <div class="stat-card"><div class="stat-label">Next Renewal</div><div class="stat-value orange">87d</div><div class="stat-change">SARS clearance — Dec 2026</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>Document Compliance Timeline</h3></div>
+    <table>
+      <thead><tr><th>Document</th><th>Status</th><th>Verified</th><th>Expires</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CIPC Registration</strong></td><td><span class="badge badge-green">Active</span></td><td>Mar 2026</td><td>Perpetual</td><td style="color:var(--gray-500)">None needed</td></tr>
+        <tr><td><strong>SARS Tax Clearance</strong></td><td><span class="badge badge-green">Valid</span></td><td>Jan 2026</td><td>Dec 2026</td><td style="color:var(--orange)">Renew in 87d</td></tr>
+        <tr><td><strong>Mining License</strong></td><td><span class="badge badge-green">Valid</span></td><td>Feb 2026</td><td>Feb 2029</td><td style="color:var(--gray-500)">None needed</td></tr>
+        <tr><td><strong>Environmental Permit</strong></td><td><span class="badge badge-green">Valid</span></td><td>Feb 2026</td><td>Aug 2028</td><td style="color:var(--gray-500)">None needed</td></tr>
+        <tr><td><strong>FICA Compliance</strong></td><td><span class="badge badge-green">Compliant</span></td><td>Mar 2026</td><td>Annual</td><td style="color:var(--gray-500)">None needed</td></tr>
+        <tr><td><strong>Sanctions Check</strong></td><td><span class="badge badge-green">Clear</span></td><td>Mar 2026</td><td>Auto-refresh</td><td style="color:var(--gray-500)">Automated</td></tr>
+        <tr><td><strong>ERP Data Attestation</strong></td><td><span class="badge badge-orange">Update Available</span></td><td>Jan 2026</td><td>Quarterly</td><td style="color:var(--orange);font-weight:600;cursor:pointer">Upload Latest &rarr;</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SUPPLIER LIVE MARKET -->
+<div class="view" id="view-s-market">
+  <div class="page-header"><div><h1>Live Commodity Market</h1><div class="page-header-sub"><span class="market-pulse"><span class="market-pulse-dot"></span> Live</span> &mdash; Track prices for your commodities. Last refresh: <span id="s-market-time">just now</span></div></div></div>
+  <div class="grid-3" id="s-market-grid"></div>
+  <div class="card" style="margin-top:14px">
+    <div class="card-header"><h3>Market News</h3></div>
+    <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Gold hits 3-month high</strong> — XAU surges past $2,175 on safe-haven demand. Consider updating listing prices to reflect market movement.</div><div class="activity-time">2 hours ago &middot; Reuters</div></div></div>
+    <div class="activity-item"><div class="activity-dot orange"></div><div><div class="activity-text"><strong>South Africa power outlook improves</strong> — Reduced loadshedding forecast boosts mining output projections for Q2 2026</div><div class="activity-time">6 hours ago &middot; Business Day</div></div></div>
+    <div class="activity-item"><div class="activity-dot blue"></div><div><div class="activity-text"><strong>LBMA gold price benchmark update</strong> — PM fix at $2,176.80, up $26.40 from previous session. Your FOB pricing tracks LBMA -0.5%</div><div class="activity-time">1 day ago &middot; LBMA</div></div></div>
+    <div class="activity-item"><div class="activity-dot teal"></div><div><div class="activity-text"><strong>Chinese import demand strong</strong> — Shanghai gold premium holds at $12/oz, signaling strong physical demand from Asian buyers</div><div class="activity-time">1 day ago &middot; Metal Bulletin</div></div></div>
+  </div>
+</div>
+
+</main>
+
+<script>
+  // ── Commodity Data ──
+  const commodities = [
+    { name:'Gold (XAU)', price:2178.40, unit:'/oz', change:1.24, high:2195.10, low:2151.30, vol:'$48.2B', bars:[65,58,72,68,80,75,82,78,85,90,88,92] },
+    { name:'Chrome Ore 42%', price:282.00, unit:'/MT', change:0.71, high:285.50, low:276.20, vol:'$1.8B', bars:[45,50,48,52,55,53,58,54,60,58,62,65] },
+    { name:'Copper (HG)', price:8942.50, unit:'/MT', change:-0.38, high:9018.00, low:8910.60, vol:'$12.4B', bars:[70,68,72,65,63,68,62,65,60,58,62,60] },
+    { name:'Manganese Ore', price:5.22, unit:'/dmtu', change:2.14, high:5.28, low:5.05, vol:'$890M', bars:[40,42,38,45,48,50,55,52,58,60,62,68] },
+    { name:'Lithium Carbonate', price:12350, unit:'/MT', change:0.93, high:12480, low:12180, vol:'$2.1B', bars:[55,52,58,60,55,62,65,60,68,65,70,72] },
+    { name:'Cobalt', price:33580, unit:'/MT', change:-0.52, high:33890, low:33410, vol:'$980M', bars:[62,60,58,55,58,52,55,50,48,52,48,50] },
+    { name:'Platinum (PGM)', price:1024.60, unit:'/oz', change:0.87, high:1032.40, low:1015.20, vol:'$3.2B', bars:[50,55,52,58,55,60,58,62,65,60,68,65] },
+    { name:'Iron Ore 62%', price:108.75, unit:'/MT', change:-1.02, high:112.30, low:107.90, vol:'$8.6B', bars:[72,68,65,70,62,65,58,62,55,58,52,55] },
+  ];
+
+  function buildMarketCards(containerId) {
+    const grid = document.getElementById(containerId);
+    if (!grid) return;
+    grid.innerHTML = '';
+    commodities.forEach(c => {
+      const isUp = c.change >= 0;
+      const fmt = c.price >= 1000 ? c.price.toLocaleString('en-US',{minimumFractionDigits:c.price%1===0?0:2}) : c.price.toFixed(2);
+      const maxBar = Math.max(...c.bars);
+      const barsHTML = c.bars.map(b => {
+        const h = Math.max(8, (b/maxBar)*40);
+        return `<div class="spark-bar ${isUp?'up':'down'}" style="height:${h}px"></div>`;
+      }).join('');
+      grid.innerHTML += `
+        <div class="market-card">
+          <div class="market-card-header"><span class="market-commodity">${c.name}</span></div>
+          <div class="market-price">$${fmt} <span style="font-size:0.72rem;color:var(--gray-500);font-weight:400">${c.unit}</span></div>
+          <div class="market-change ${isUp?'up':'down'}">${isUp?'+':''}${c.change.toFixed(2)}% today</div>
+          <div class="sparkline">${barsHTML}</div>
+          <div class="market-details">
+            <div class="market-detail"><div class="market-detail-label">24h High</div><div class="market-detail-value">$${c.high.toLocaleString('en-US',{minimumFractionDigits:c.high%1===0?0:2})}</div></div>
+            <div class="market-detail"><div class="market-detail-label">24h Low</div><div class="market-detail-value">$${c.low.toLocaleString('en-US',{minimumFractionDigits:c.low%1===0?0:2})}</div></div>
+            <div class="market-detail"><div class="market-detail-label">Volume</div><div class="market-detail-value">${c.vol}</div></div>
+          </div>
+        </div>`;
+    });
+  }
+
+  // ── Live price simulation ──
+  function simulatePrices() {
+    commodities.forEach(c => {
+      const delta = (Math.random() - 0.48) * c.price * 0.001;
+      c.price = Math.max(0.01, c.price + delta);
+      c.change += (Math.random() - 0.48) * 0.05;
+      c.bars.shift();
+      c.bars.push(c.bars[c.bars.length-1] + (Math.random()-0.45)*8);
+    });
+    buildMarketCards('b-market-grid');
+    buildMarketCards('s-market-grid');
+    const now = new Date().toLocaleTimeString();
+    const bt = document.getElementById('b-market-time');
+    const st = document.getElementById('s-market-time');
+    if (bt) bt.textContent = now;
+    if (st) st.textContent = now;
+  }
+
+  // ── Ticker price simulation ──
+  function updateTicker() {
+    const pairs = [
+      {el:'t-gold',cel:'tc-gold',base:2178.40},
+      {el:'t-chrome',cel:'tc-chrome',base:282},
+      {el:'t-copper',cel:'tc-copper',base:8942.50},
+      {el:'t-mang',cel:'tc-mang',base:5.22},
+      {el:'t-lith',cel:'tc-lith',base:12350},
+      {el:'t-cobalt',cel:'tc-cobalt',base:33580},
+      {el:'t-plat',cel:'tc-plat',base:1024.60},
+      {el:'t-iron',cel:'tc-iron',base:108.75},
+    ];
+    pairs.forEach(p => {
+      const el = document.getElementById(p.el);
+      const cel = document.getElementById(p.cel);
+      if (!el || !cel) return;
+      const delta = (Math.random()-0.48)*p.base*0.0008;
+      const newPrice = p.base + delta;
+      const pct = ((newPrice - p.base)/p.base*100);
+      const isUp = pct >= 0;
+      el.textContent = '$' + newPrice.toLocaleString('en-US',{minimumFractionDigits:newPrice>=100?2:(newPrice>=10?2:2)});
+      cel.textContent = (isUp?'+':'') + pct.toFixed(2) + '%';
+      cel.className = 'ticker-change ' + (isUp?'up':'down');
+    });
+  }
+
+  // ── Role switching ──
+  let currentRole = 'buyer';
+  function switchRole(role) {
+    currentRole = role;
+    document.getElementById('sidebar-buyer').style.display = role==='buyer' ? '' : 'none';
+    document.getElementById('sidebar-supplier').style.display = role==='supplier' ? '' : 'none';
+    document.getElementById('btn-buyer').className = role==='buyer' ? 'role-btn active-buyer' : 'role-btn';
+    document.getElementById('btn-supplier').className = role==='supplier' ? 'role-btn active-supplier' : 'role-btn';
+    // Show first view of the role
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    const firstView = role==='buyer' ? 'b-dashboard' : 's-dashboard';
+    document.getElementById('view-'+firstView).classList.add('active');
+    document.querySelector(`[data-view="${firstView}"]`).classList.add('active');
+  }
+
+  // ── View switching ──
+  function switchView(viewName) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const roleLinks = document.querySelectorAll(`[data-role="${currentRole}"]`);
+    roleLinks.forEach(l => l.classList.remove('active'));
+    document.getElementById('view-'+viewName).classList.add('active');
+    const link = document.querySelector(`[data-view="${viewName}"]`);
+    if (link) link.classList.add('active');
+  }
+
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const view = link.getAttribute('data-view');
+      if (view) switchView(view);
+    });
+  });
+
+  // ── Init ──
+  buildMarketCards('b-market-grid');
+  buildMarketCards('s-market-grid');
+  setInterval(simulatePrices, 5000);
+  setInterval(updateTicker, 3000);
+</script>
+
+</body>
+</html>
