@@ -294,6 +294,58 @@
     }
     .mobile-overlay.active { display:block; }
 
+    /* ── Platform Authority Bar ── */
+    .authority-bar { background:rgba(233,122,2,0.04); border:1px solid rgba(233,122,2,0.12); border-radius:var(--radius); padding:14px 24px; margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    .authority-stat { text-align:center; flex:1; min-width:100px; }
+    .authority-num { font-size:1.1rem; font-weight:800; color:var(--orange); }
+    .authority-label { font-size:0.62rem; color:var(--gray-500); text-transform:uppercase; letter-spacing:0.06em; font-weight:600; margin-top:2px; }
+    .authority-divider { width:1px; height:32px; background:var(--border); flex-shrink:0; }
+
+    /* ── Trust Badge (Inline) ── */
+    .trust-badge-inline { display:inline-flex; align-items:center; gap:5px; padding:2px 8px; border-radius:6px; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; }
+    .trust-badge-inline.verified { background:var(--green-dim); color:var(--green); border:1px solid rgba(34,197,94,0.2); }
+    .trust-badge-inline.pending { background:var(--yellow-dim); color:var(--yellow); border:1px solid rgba(234,179,8,0.2); }
+    .trust-badge-inline .tb-icon { width:12px; height:12px; }
+
+    /* ── Trade Flow Modal ── */
+    .trade-modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.75); z-index:2000; backdrop-filter:blur(8px); align-items:center; justify-content:center; }
+    .trade-modal-overlay.active { display:flex; }
+    .trade-modal { background:var(--bg); border:1px solid var(--border); border-radius:16px; width:90%; max-width:720px; max-height:90vh; overflow-y:auto; padding:0; box-shadow:0 25px 80px rgba(0,0,0,0.5); }
+    .trade-modal-header { padding:24px 28px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .trade-modal-header h2 { font-size:1.1rem; font-weight:700; }
+    .trade-modal-close { width:32px; height:32px; border-radius:8px; border:1px solid var(--border); background:transparent; color:var(--gray-400); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+    .trade-modal-close:hover { background:rgba(255,255,255,0.05); color:var(--white); }
+    .trade-modal-body { padding:28px; }
+
+    /* ── Trade Flow Steps ── */
+    .flow-steps { position:relative; }
+    .flow-step { display:flex; gap:16px; padding-bottom:28px; position:relative; opacity:0.3; transition:all 0.6s ease; }
+    .flow-step.active, .flow-step.done { opacity:1; }
+    .flow-step-line { position:absolute; left:19px; top:40px; bottom:0; width:2px; background:var(--border); }
+    .flow-step.done .flow-step-line { background:var(--green); }
+    .flow-step.active .flow-step-line { background:var(--orange); }
+    .flow-step:last-child .flow-step-line { display:none; }
+    .flow-step-dot { width:40px; height:40px; border-radius:50%; border:2px solid var(--border); background:var(--card); display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0; z-index:1; transition:all 0.4s ease; }
+    .flow-step.done .flow-step-dot { background:var(--green); border-color:var(--green); color:var(--white); }
+    .flow-step.active .flow-step-dot { background:var(--orange); border-color:var(--orange); color:var(--white); box-shadow:0 0 20px var(--orange-glow); animation:pulse 2s infinite; }
+    .flow-step-content { flex:1; padding-top:6px; }
+    .flow-step-title { font-size:0.92rem; font-weight:700; margin-bottom:4px; }
+    .flow-step.done .flow-step-title { color:var(--green); }
+    .flow-step.active .flow-step-title { color:var(--orange); }
+    .flow-step-desc { font-size:0.78rem; color:var(--gray-400); line-height:1.6; }
+    .flow-step-detail { margin-top:8px; padding:12px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:8px; font-size:0.78rem; }
+    .flow-step.active .flow-step-detail { border-color:rgba(233,122,2,0.2); background:rgba(233,122,2,0.04); }
+    .flow-step.done .flow-step-detail { border-color:rgba(34,197,94,0.2); background:rgba(34,197,94,0.04); }
+
+    /* ── Trade Modal Footer ── */
+    .trade-modal-footer { padding:20px 28px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .trade-modal-footer .trade-id { font-family:'SF Mono',monospace,sans-serif; font-size:0.72rem; color:var(--gray-500); }
+
+    /* ── Listing Start Trade Button ── */
+    .listing-card .start-trade-btn { display:none; margin-top:12px; width:100%; padding:10px; border-radius:8px; font-size:0.82rem; font-weight:600; font-family:inherit; cursor:pointer; border:1px solid rgba(233,122,2,0.3); background:rgba(233,122,2,0.08); color:var(--orange); transition:all 0.2s; }
+    .listing-card:hover .start-trade-btn { display:block; }
+    .listing-card .start-trade-btn:hover { background:var(--orange); color:var(--white); }
+
     /* ── Responsive ── */
     @media (max-width:1024px) { .stats-grid{grid-template-columns:repeat(2,1fr)} .grid-2,.grid-3{grid-template-columns:1fr} .escrow-stages{grid-template-columns:1fr} .moat-grid{grid-template-columns:1fr} .arch-flow{flex-direction:column} .arch-arrow{transform:rotate(90deg)} }
     @media (max-width:768px) {
@@ -453,10 +505,117 @@
   </div>
 </aside>
 
+<!-- ═══ Trade Flow Modal ═══ -->
+<div class="trade-modal-overlay" id="trade-modal" onclick="if(event.target===this)closeTradeModal()">
+  <div class="trade-modal">
+    <div class="trade-modal-header">
+      <h2 id="trade-modal-title">Start Trade — Gold (Au 99.5%)</h2>
+      <button class="trade-modal-close" onclick="closeTradeModal()">&times;</button>
+    </div>
+    <div class="trade-modal-body">
+      <!-- Supplier Trust Header -->
+      <div style="display:flex;align-items:center;gap:14px;padding:16px;background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.15);border-radius:10px;margin-bottom:24px">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--orange-dim);color:var(--orange);display:flex;align-items:center;justify-content:center;font-weight:700" id="trade-supplier-avatar">LM</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-weight:700" id="trade-supplier-name">Lumina Metals</span><span class="trust-badge-inline verified"><svg class="tb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> VERIFIED</span></div>
+          <div style="font-size:0.75rem;color:var(--gray-500);margin-top:2px">Trust Score: <strong style="color:var(--green)" id="trade-trust-score">94</strong> &middot; 14 deals &middot; 98.2% delivery &middot; <span style="color:var(--green)">Compliance Ready</span></div>
+        </div>
+        <div style="text-align:right"><div style="font-size:0.65rem;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.05em">Escrow</div><div style="font-size:0.88rem;font-weight:700;color:var(--orange)">Required</div></div>
+      </div>
+
+      <!-- Flow Steps -->
+      <div class="flow-steps" id="flow-steps">
+        <div class="flow-step" id="step-1">
+          <div class="flow-step-line"></div>
+          <div class="flow-step-dot">1</div>
+          <div class="flow-step-content">
+            <div class="flow-step-title">RFQ Sent to Supplier</div>
+            <div class="flow-step-desc">Request for Quote submitted. Supplier notified via platform. Off-platform communication not permitted.</div>
+            <div class="flow-step-detail">
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--gray-500)">Commodity</span><span id="step1-commodity">Gold (Au 99.5%) — 500 kg</span></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="color:var(--gray-500)">Price Reference</span><span style="color:#0ea5e9" id="step1-price">LBMA PM Fix: $3,043.80/oz</span></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="color:var(--gray-500)">Incoterm</span><span id="step1-incoterm">FOB Durban</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-step" id="step-2">
+          <div class="flow-step-line"></div>
+          <div class="flow-step-dot">2</div>
+          <div class="flow-step-content">
+            <div class="flow-step-title">Supplier Responds with Quote</div>
+            <div class="flow-step-desc">Supplier confirms availability, quantity, and pricing. Price auto-calculated from price_engine().</div>
+            <div class="flow-step-detail">
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--gray-500)">Quoted Price</span><span style="font-weight:700" id="step2-price">$62,400/kg</span></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="color:var(--gray-500)">Spread vs Spot</span><span style="color:var(--green)">-0.5% (transparent)</span></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="color:var(--gray-500)">Supplier Trust Score</span><span style="color:var(--green);font-weight:600" id="step2-score">94 — Fully Verified</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-step" id="step-3">
+          <div class="flow-step-line"></div>
+          <div class="flow-step-dot">3</div>
+          <div class="flow-step-content">
+            <div class="flow-step-title">Buyer Accepts — Contract Generated</div>
+            <div class="flow-step-desc">AxisTrade auto-generates SPA with locked pricing, terms, and compliance requirements. Docs are only valid via AxisTrade.</div>
+            <div class="flow-step-detail">
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--gray-500)">Contract</span><span style="color:var(--orange)">SPA-2026-041 generated</span></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="color:var(--gray-500)">KYC Status</span><span><span class="trust-badge-inline verified"><svg class="tb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Both Parties Verified</span></span></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="color:var(--gray-500)">Insurance</span><span>ATIDI coverage activated</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-step" id="step-4">
+          <div class="flow-step-line"></div>
+          <div class="flow-step-dot">4</div>
+          <div class="flow-step-content">
+            <div class="flow-step-title">Escrow Funded — Funds Locked</div>
+            <div class="flow-step-desc">Buyer deposits into AxisTrade escrow. Smart contract enforces milestone-based releases. Funds cannot leave the platform.</div>
+            <div class="flow-step-detail">
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--gray-500)">Escrow Amount</span><span style="font-weight:700;color:var(--orange)" id="step4-amount">$1,200,000</span></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="color:var(--gray-500)">Release Trigger</span><span>SGS Assay verification</span></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="color:var(--gray-500)">Custody</span><span style="color:var(--orange);font-weight:600">AxisTrade is sole custodian</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-step" id="step-5">
+          <div class="flow-step-line"></div>
+          <div class="flow-step-dot">5</div>
+          <div class="flow-step-content">
+            <div class="flow-step-title">Assay + Shipment + Settlement</div>
+            <div class="flow-step-desc">SGS verifies quality. Logistics tracked on-platform. Escrow releases automatically upon delivery confirmation. Trade complete.</div>
+            <div class="flow-step-detail">
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--gray-500)">Assay Provider</span><span>SGS South Africa (verified)</span></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="color:var(--gray-500)">Tracking</span><span>BOL + GPS via platform</span></div>
+              <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="color:var(--gray-500)">Settlement</span><span style="color:var(--green);font-weight:600">Auto-release to supplier</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="trade-modal-footer">
+      <div><span class="trade-id" id="trade-id">Trade ID: ATX-2026-047</span> &middot; <span style="font-size:0.72rem;color:var(--gray-600)">All docs valid only via AxisTrade</span></div>
+      <button class="btn btn-primary" id="trade-flow-btn" onclick="advanceTradeFlow()">Start Trade</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════ -->
 <!-- ═══         MAIN CONTENT            ═══ -->
 <!-- ═══════════════════════════════════════ -->
 <main class="main">
+
+<!-- ═══ Platform Authority Bar (visible on all views) ═══ -->
+<div class="authority-bar" id="authority-bar">
+  <div class="authority-stat"><div class="authority-num">$48.2M</div><div class="authority-label">Total Volume Traded</div></div>
+  <div class="authority-divider"></div>
+  <div class="authority-stat"><div class="authority-num">142</div><div class="authority-label">Verified Suppliers</div></div>
+  <div class="authority-divider"></div>
+  <div class="authority-stat"><div class="authority-num">387</div><div class="authority-label">Deals Executed</div></div>
+  <div class="authority-divider"></div>
+  <div class="authority-stat"><div class="authority-num">99.1%</div><div class="authority-label">Settlement Rate</div></div>
+  <div class="authority-divider"></div>
+  <div class="authority-stat"><div class="authority-num" style="color:var(--green)">0</div><div class="authority-label">Fraud Incidents</div></div>
+</div>
 
 <!-- ═══════════════════════════════════════════ -->
 <!-- ═══  SHARED: PLATFORM OVERVIEW (NEW)    ═══ -->
@@ -1286,11 +1445,19 @@
         ? '<span class="badge badge-green"><span class="badge-dot"></span> Verified</span>'
         : '<span class="badge badge-orange"><span class="badge-dot"></span> Pending Assay</span>';
 
+      const trustColor = l.score >= 90 ? 'var(--green)' : l.score >= 85 ? 'var(--yellow)' : 'var(--gray-400)';
+      const trustLabel = l.score >= 90 ? 'TRUSTED' : l.score >= 85 ? 'REVIEWED' : 'NEW';
+      const escrowLabel = '<span style="display:inline-flex;align-items:center;gap:4px;font-size:0.6rem;color:var(--orange);font-weight:700;margin-left:6px">&#128274; ESCROW REQ.</span>';
+      const idx = marketplaceListings.indexOf(l);
+
       grid.innerHTML += `
-        <div class="listing-card">
+        <div class="listing-card" onclick="openTradeModal(${idx})">
           <div class="listing-top"><span class="listing-commodity">${l.commodity}</span>${verifiedBadge}</div>
-          <div class="listing-meta"><span class="listing-meta-item">${l.qty}</span><span class="listing-meta-item">${l.location}</span><span class="listing-meta-item">${l.incoterm}</span></div>
-          <div class="listing-price">$${formatNum(listingPrice, l.symbol==='Li2CO3'||l.symbol==='Co'?0:2)} <span class="listing-price-unit">${l.unitLabel}</span></div>
+          <div class="listing-meta">
+            <span class="listing-meta-item">${l.qty}</span><span class="listing-meta-item">${l.location}</span><span class="listing-meta-item">${l.incoterm}</span>
+            <span class="listing-meta-item" style="background:rgba(34,197,94,0.08);color:var(--green);font-weight:600">&#9989; Compliance Ready</span>
+          </div>
+          <div class="listing-price">$${formatNum(listingPrice, l.symbol==='Li2CO3'||l.symbol==='Co'?0:2)} <span class="listing-price-unit">${l.unitLabel}</span>${escrowLabel}</div>
           <div class="price-breakdown">
             <div class="price-row"><span class="price-row-label">${calc.exchange} Spot</span><span class="price-row-val">$${formatNum(spotRef, 2)}</span></div>
             <div class="price-row"><span class="price-row-label">Location Premium</span><span class="price-row-val">${calc.locationPremium>=0?'+':''}${calc.locationPremium.toFixed(1)}%</span></div>
@@ -1300,7 +1467,15 @@
             <div class="price-row total"><span class="price-row-label">Total Spread vs Spot</span><span class="price-row-val">${calc.totalSpread>=0?'+':''}${calc.totalSpread.toFixed(1)}%</span></div>
           </div>
           <div class="price-src-tag"><span class="live-dot"></span> ${calc.exchange} · ${new Date().toLocaleTimeString()}</div>
-          <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">${l.initials}</div><span class="listing-supplier-name">${l.supplier}</span></div><span class="listing-score">Score: ${l.score}</span></div>
+          <div class="listing-footer">
+            <div class="listing-supplier">
+              <div class="listing-supplier-avatar">${l.initials}</div>
+              <span class="listing-supplier-name">${l.supplier}</span>
+              <span class="trust-badge-inline verified" style="margin-left:4px"><svg class="tb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> ${trustLabel}</span>
+            </div>
+            <span class="listing-score" style="color:${trustColor}">&#9733; ${l.score}</span>
+          </div>
+          <button class="start-trade-btn" onclick="event.stopPropagation();openTradeModal(${idx})">&#9889; Start Trade — Escrow Required</button>
         </div>`;
     });
   }
@@ -1479,6 +1654,104 @@
   document.querySelectorAll('.sidebar-link').forEach(link => {
     link.addEventListener('click', () => closeMobileMenu());
   });
+
+  // ══════════════════════════════════════════════
+  // ═══  TRADE FLOW SIMULATION                 ═══
+  // ══════════════════════════════════════════════
+  let tradeFlowStep = 0;
+  let tradeFlowInterval = null;
+
+  function openTradeModal(listingIdx) {
+    const l = marketplaceListings[listingIdx];
+    if (!l) return;
+
+    const calc = PriceEngine.calculateListingPrice(l.symbol, l.priceParams);
+    const listingPrice = calc ? calc.finalPrice * l.spotToUnit : 0;
+    const totalValue = l.commodity.includes('Gold') ? '$1,200,000' : '$' + formatNum(listingPrice * parseInt(l.qty.replace(/,/g,'')) || listingPrice * 100, 0);
+
+    // Update modal content
+    document.getElementById('trade-modal-title').textContent = 'Start Trade — ' + l.commodity;
+    document.getElementById('trade-supplier-avatar').textContent = l.initials;
+    document.getElementById('trade-supplier-name').textContent = l.supplier;
+    document.getElementById('trade-trust-score').textContent = l.score;
+    document.getElementById('step1-commodity').textContent = l.commodity + ' — ' + l.qty;
+    document.getElementById('step1-price').textContent = (calc ? calc.exchange : 'LBMA') + ': $' + (calc ? formatNum(calc.spotPrice, 2) : '0');
+    document.getElementById('step1-incoterm').textContent = l.incoterm;
+    document.getElementById('step2-price').textContent = '$' + formatNum(listingPrice, l.symbol==='Li2CO3'||l.symbol==='Co'?0:2) + l.unitLabel;
+    document.getElementById('step2-score').textContent = l.score + (l.score >= 90 ? ' — Fully Verified' : ' — Under Review');
+    document.getElementById('step4-amount').textContent = totalValue;
+    document.getElementById('trade-id').textContent = 'Trade ID: ATX-2026-' + String(47 + listingIdx).padStart(3, '0');
+
+    // Reset flow
+    tradeFlowStep = 0;
+    document.querySelectorAll('.flow-step').forEach(s => { s.className = 'flow-step'; });
+    document.getElementById('trade-flow-btn').textContent = 'Send RFQ';
+    document.getElementById('trade-flow-btn').style.background = '';
+    document.getElementById('trade-flow-btn').disabled = false;
+
+    // Show modal
+    document.getElementById('trade-modal').classList.add('active');
+  }
+
+  function closeTradeModal() {
+    document.getElementById('trade-modal').classList.remove('active');
+    if (tradeFlowInterval) { clearInterval(tradeFlowInterval); tradeFlowInterval = null; }
+  }
+
+  function advanceTradeFlow() {
+    tradeFlowStep++;
+    const btn = document.getElementById('trade-flow-btn');
+    const steps = ['step-1','step-2','step-3','step-4','step-5'];
+    const labels = ['Send RFQ', 'Supplier Responding...', 'Accept & Generate Contract', 'Fund Escrow', 'Execute & Settle', 'Trade Complete'];
+
+    if (tradeFlowStep <= 5) {
+      // Mark previous steps as done
+      for (let i = 1; i < tradeFlowStep; i++) {
+        const el = document.getElementById('step-' + i);
+        el.className = 'flow-step done';
+        el.querySelector('.flow-step-dot').innerHTML = '&#10003;';
+      }
+      // Mark current step as active
+      const current = document.getElementById('step-' + tradeFlowStep);
+      current.className = 'flow-step active';
+      current.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+      // Special handling for step 2: auto-advance after delay (simulating supplier response)
+      if (tradeFlowStep === 1) {
+        btn.textContent = 'Awaiting Supplier...';
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+        setTimeout(() => {
+          // Auto-advance to step 2
+          document.getElementById('step-1').className = 'flow-step done';
+          document.getElementById('step-1').querySelector('.flow-step-dot').innerHTML = '&#10003;';
+          tradeFlowStep = 2;
+          document.getElementById('step-2').className = 'flow-step active';
+          btn.textContent = 'Accept Quote & Generate Contract';
+          btn.disabled = false;
+          btn.style.opacity = '1';
+        }, 2000);
+        return;
+      }
+
+      if (tradeFlowStep === 5) {
+        btn.textContent = 'Executing...';
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+        setTimeout(() => {
+          document.getElementById('step-5').className = 'flow-step done';
+          document.getElementById('step-5').querySelector('.flow-step-dot').innerHTML = '&#10003;';
+          btn.textContent = '&#10003; Trade Complete — Settlement Done';
+          btn.style.background = 'var(--green)';
+          btn.style.opacity = '1';
+          btn.style.boxShadow = '0 0 20px rgba(34,197,94,0.3)';
+        }, 2500);
+        return;
+      }
+
+      btn.textContent = labels[tradeFlowStep] || 'Next Step';
+    }
+  }
 
   // ── INIT — Everything starts from PriceEngine ──
   PriceEngine.init();
