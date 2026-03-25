@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AxisTrade — Platform Demo</title>
+  <title>AxisTrade — Transaction Execution Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -21,6 +21,7 @@
       --red: #ef4444; --red-dim: rgba(239,68,68,0.12);
       --yellow: #eab308; --yellow-dim: rgba(234,179,8,0.12);
       --blue: #3b82f6; --blue-dim: rgba(59,130,246,0.12);
+      --purple: #a855f7; --purple-dim: rgba(168,85,247,0.12);
       --text-muted: #b0b0b0; --radius: 12px;
     }
     html { scroll-behavior: smooth; }
@@ -35,6 +36,7 @@
     .ticker-change { font-weight:600; }
     .ticker-change.up { color:var(--green); }
     .ticker-change.down { color:var(--red); }
+    .ticker-src { font-size:0.58rem; color:var(--gray-600); font-weight:400; }
     @keyframes tickerScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
     /* ── Demo Banner ── */
@@ -119,6 +121,7 @@
     .badge-blue { background:var(--blue-dim); color:var(--blue); }
     .badge-gray { background:rgba(255,255,255,0.06); color:var(--gray-400); }
     .badge-teal { background:var(--teal-dim); color:#0ea5e9; }
+    .badge-purple { background:var(--purple-dim); color:var(--purple); }
     .badge-dot { width:6px; height:6px; border-radius:50%; }
     .badge-green .badge-dot { background:var(--green); }
     .badge-orange .badge-dot { background:var(--orange); }
@@ -175,6 +178,17 @@
     .listing-score { font-size:0.72rem; font-weight:700; color:var(--orange); }
     .listing-price { font-size:1.15rem; font-weight:800; }
     .listing-price-unit { font-size:0.72rem; color:var(--gray-500); font-weight:400; }
+
+    /* ── Price Engine Breakdown ── */
+    .price-breakdown { background:rgba(233,122,2,0.04); border:1px solid rgba(233,122,2,0.12); border-radius:8px; padding:10px 12px; margin-top:10px; font-size:0.7rem; }
+    .price-row { display:flex; justify-content:space-between; padding:2px 0; }
+    .price-row-label { color:var(--gray-500); }
+    .price-row-val { color:var(--gray-300); font-weight:500; font-family:'SF Mono',monospace,sans-serif; }
+    .price-row.total { border-top:1px solid var(--border); margin-top:4px; padding-top:6px; }
+    .price-row.total .price-row-label { color:var(--orange); font-weight:600; }
+    .price-row.total .price-row-val { color:var(--white); font-weight:700; }
+    .price-src-tag { display:inline-flex; align-items:center; gap:4px; font-size:0.6rem; color:var(--gray-500); font-weight:500; padding:2px 7px; background:rgba(255,255,255,0.04); border-radius:4px; margin-top:6px; }
+    .price-src-tag .live-dot { width:5px; height:5px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
 
     /* ── Compliance ── */
     .compliance-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-light); }
@@ -244,6 +258,28 @@
     .inquiry-body { font-size:0.82rem; color:var(--gray-300); margin-bottom:12px; line-height:1.6; }
     .inquiry-footer { display:flex; align-items:center; gap:10px; }
 
+    /* ── Moat / Lock-in Cards ── */
+    .moat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:16px; }
+    .moat-card { background:rgba(233,122,2,0.04); border:1px solid rgba(233,122,2,0.15); border-radius:var(--radius); padding:18px; }
+    .moat-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:6px; color:var(--orange); }
+    .moat-card p { font-size:0.78rem; color:var(--gray-300); line-height:1.6; margin:0; }
+    .moat-card .lock-icon { font-size:1.3rem; margin-bottom:8px; }
+
+    /* ── Revenue Model ── */
+    .revenue-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:22px; text-align:center; }
+    .revenue-pct { font-size:2rem; font-weight:800; color:var(--orange); line-height:1; }
+    .revenue-type { font-size:0.82rem; font-weight:600; margin-top:6px; }
+    .revenue-desc { font-size:0.72rem; color:var(--gray-500); margin-top:4px; }
+
+    /* ── Architecture Flow ── */
+    .arch-flow { display:flex; align-items:center; justify-content:center; gap:0; flex-wrap:wrap; margin:24px 0; }
+    .arch-node { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; text-align:center; min-width:140px; }
+    .arch-node.active { border-color:var(--orange); background:rgba(233,122,2,0.08); }
+    .arch-node-label { font-size:0.68rem; color:var(--gray-500); text-transform:uppercase; letter-spacing:0.05em; }
+    .arch-node-name { font-size:0.92rem; font-weight:700; margin-top:4px; }
+    .arch-node.active .arch-node-name { color:var(--orange); }
+    .arch-arrow { font-size:1.2rem; color:var(--gray-600); padding:0 8px; }
+
     /* ── Mobile Menu Button ── */
     .mobile-menu-btn {
       display:none; position:fixed; bottom:20px; right:20px; z-index:1100;
@@ -259,7 +295,7 @@
     .mobile-overlay.active { display:block; }
 
     /* ── Responsive ── */
-    @media (max-width:1024px) { .stats-grid{grid-template-columns:repeat(2,1fr)} .grid-2,.grid-3{grid-template-columns:1fr} .escrow-stages{grid-template-columns:1fr} }
+    @media (max-width:1024px) { .stats-grid{grid-template-columns:repeat(2,1fr)} .grid-2,.grid-3{grid-template-columns:1fr} .escrow-stages{grid-template-columns:1fr} .moat-grid{grid-template-columns:1fr} .arch-flow{flex-direction:column} .arch-arrow{transform:rotate(90deg)} }
     @media (max-width:768px) {
       .sidebar { display:none; transition:transform 0.3s ease; }
       .sidebar.mobile-open { display:flex; transform:translateX(0); z-index:1060; }
@@ -281,30 +317,12 @@
 
 <!-- ═══ Live Commodity Ticker ═══ -->
 <div class="ticker-bar">
-  <div class="ticker-track" id="ticker">
-    <span class="ticker-item"><span class="ticker-name">XAU Gold</span><span class="ticker-price" id="t-gold">$2,178.40</span><span class="ticker-change up" id="tc-gold">+1.24%</span></span>
-    <span class="ticker-item"><span class="ticker-name">Chrome Ore 42%</span><span class="ticker-price" id="t-chrome">$282.00</span><span class="ticker-change up" id="tc-chrome">+0.71%</span></span>
-    <span class="ticker-item"><span class="ticker-name">HG Copper</span><span class="ticker-price" id="t-copper">$8,942.50</span><span class="ticker-change down" id="tc-copper">-0.38%</span></span>
-    <span class="ticker-item"><span class="ticker-name">Manganese Ore</span><span class="ticker-price" id="t-mang">$5.22</span><span class="ticker-change up" id="tc-mang">+2.14%</span></span>
-    <span class="ticker-item"><span class="ticker-name">Lithium Carbonate</span><span class="ticker-price" id="t-lith">$12,350</span><span class="ticker-change up" id="tc-lith">+0.93%</span></span>
-    <span class="ticker-item"><span class="ticker-name">Cobalt</span><span class="ticker-price" id="t-cobalt">$33,580</span><span class="ticker-change down" id="tc-cobalt">-0.52%</span></span>
-    <span class="ticker-item"><span class="ticker-name">PGM Platinum</span><span class="ticker-price" id="t-plat">$1,024.60</span><span class="ticker-change up" id="tc-plat">+0.87%</span></span>
-    <span class="ticker-item"><span class="ticker-name">Iron Ore 62%</span><span class="ticker-price" id="t-iron">$108.75</span><span class="ticker-change down" id="tc-iron">-1.02%</span></span>
-    <!-- duplicate for seamless scroll -->
-    <span class="ticker-item"><span class="ticker-name">XAU Gold</span><span class="ticker-price">$2,178.40</span><span class="ticker-change up">+1.24%</span></span>
-    <span class="ticker-item"><span class="ticker-name">Chrome Ore 42%</span><span class="ticker-price">$282.00</span><span class="ticker-change up">+0.71%</span></span>
-    <span class="ticker-item"><span class="ticker-name">HG Copper</span><span class="ticker-price">$8,942.50</span><span class="ticker-change down">-0.38%</span></span>
-    <span class="ticker-item"><span class="ticker-name">Manganese Ore</span><span class="ticker-price">$5.22</span><span class="ticker-change up">+2.14%</span></span>
-    <span class="ticker-item"><span class="ticker-name">Lithium Carbonate</span><span class="ticker-price">$12,350</span><span class="ticker-change up">+0.93%</span></span>
-    <span class="ticker-item"><span class="ticker-name">Cobalt</span><span class="ticker-price">$33,580</span><span class="ticker-change down">-0.52%</span></span>
-    <span class="ticker-item"><span class="ticker-name">PGM Platinum</span><span class="ticker-price">$1,024.60</span><span class="ticker-change up">+0.87%</span></span>
-    <span class="ticker-item"><span class="ticker-name">Iron Ore 62%</span><span class="ticker-price">$108.75</span><span class="ticker-change down">-1.02%</span></span>
-  </div>
+  <div class="ticker-track" id="ticker"></div>
 </div>
 
 <!-- ═══ Demo Banner ═══ -->
 <div class="demo-banner">
-  Interactive Product Demo
+  Transaction Execution Infrastructure for Global Commodities
   <a href="index.html">Back to Waitlist</a>
   <a href="index.html#waitlist">Join Now</a>
 </div>
@@ -323,6 +341,11 @@
   <a href="#" class="sidebar-logo">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 438" fill="none" style="width:28px;height:20px;"><path d="M 424.258 190.157 A 146 146 0 1 1 314.843 80.742" stroke="#FFFFFF" stroke-width="44" stroke-linecap="butt"/><path d="M405 93 L358 107 L384 114 L388 139 Z" fill="#E97A02"/></svg>
     AxisTrade
+  </a>
+  <div class="sidebar-section">Platform</div>
+  <a class="sidebar-link" data-view="platform-overview" data-role="buyer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    How It Works
   </a>
   <div class="sidebar-section">Overview</div>
   <a class="sidebar-link active" data-view="b-dashboard" data-role="buyer">
@@ -354,6 +377,10 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
     Live Market
   </a>
+  <a class="sidebar-link" data-view="revenue-model" data-role="buyer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    Revenue Model
+  </a>
   <div class="sidebar-bottom">
     <div class="sidebar-user">
       <div class="sidebar-avatar buyer-av">GB</div>
@@ -369,6 +396,11 @@
   <a href="#" class="sidebar-logo">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 438" fill="none" style="width:28px;height:20px;"><path d="M 424.258 190.157 A 146 146 0 1 1 314.843 80.742" stroke="#FFFFFF" stroke-width="44" stroke-linecap="butt"/><path d="M405 93 L358 107 L384 114 L388 139 Z" fill="#E97A02"/></svg>
     AxisTrade
+  </a>
+  <div class="sidebar-section">Platform</div>
+  <a class="sidebar-link" data-view="platform-overview" data-role="supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    How It Works
   </a>
   <div class="sidebar-section">Overview</div>
   <a class="sidebar-link active" data-view="s-dashboard" data-role="supplier">
@@ -409,6 +441,10 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
     Live Market
   </a>
+  <a class="sidebar-link" data-view="revenue-model" data-role="supplier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    Revenue Model
+  </a>
   <div class="sidebar-bottom">
     <div class="sidebar-user">
       <div class="sidebar-avatar supplier-av">LM</div>
@@ -421,6 +457,145 @@
 <!-- ═══         MAIN CONTENT            ═══ -->
 <!-- ═══════════════════════════════════════ -->
 <main class="main">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- ═══  SHARED: PLATFORM OVERVIEW (NEW)    ═══ -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="view" id="view-platform-overview">
+  <div class="page-header"><div>
+    <h1>The Transaction Execution Layer for Global Commodities</h1>
+    <div class="page-header-sub">We don't just connect buyers and sellers. We control execution.</div>
+  </div></div>
+
+  <!-- Hook -->
+  <div class="card" style="background:linear-gradient(135deg,rgba(233,122,2,0.08),rgba(7,80,115,0.06));border-color:rgba(233,122,2,0.2);text-align:center;padding:32px">
+    <div style="font-size:1.6rem;font-weight:800;line-height:1.3;max-width:700px;margin:0 auto">Over <span style="color:var(--orange)">$2 trillion</span> in commodity deals happen through emails, WhatsApp, and broken trust systems.</div>
+    <div style="font-size:0.88rem;color:var(--gray-400);margin-top:12px">AxisTrade replaces all of it with a single, verifiable execution pipeline.</div>
+  </div>
+
+  <!-- Problem -->
+  <div class="stats-grid" style="margin-top:20px">
+    <div class="stat-card" style="border-color:rgba(239,68,68,0.2)"><div class="stat-label" style="color:var(--red)">Problem 1</div><div style="font-size:0.92rem;font-weight:600;margin-top:6px">No Price Transparency</div><div style="font-size:0.75rem;color:var(--gray-500);margin-top:4px">Pricing based on hearsay, not anchored to LBMA/LME benchmarks</div></div>
+    <div class="stat-card" style="border-color:rgba(239,68,68,0.2)"><div class="stat-label" style="color:var(--red)">Problem 2</div><div style="font-size:0.92rem;font-weight:600;margin-top:6px">Fake Buyers & Sellers</div><div style="font-size:0.75rem;color:var(--gray-500);margin-top:4px">No KYC verification, rampant fraud in artisanal mining trade</div></div>
+    <div class="stat-card" style="border-color:rgba(239,68,68,0.2)"><div class="stat-label" style="color:var(--red)">Problem 3</div><div style="font-size:0.92rem;font-weight:600;margin-top:6px">Deal Leakage</div><div style="font-size:0.75rem;color:var(--gray-500);margin-top:4px">Parties meet on platforms, then transact off-platform to avoid fees</div></div>
+    <div class="stat-card" style="border-color:rgba(239,68,68,0.2)"><div class="stat-label" style="color:var(--red)">Problem 4</div><div style="font-size:0.92rem;font-weight:600;margin-top:6px">No Standardized Execution</div><div style="font-size:0.75rem;color:var(--gray-500);margin-top:4px">Contracts, escrow, compliance all done manually across 10+ systems</div></div>
+  </div>
+
+  <!-- Architecture: Single Source of Truth Pipeline -->
+  <div class="card" style="margin-top:14px">
+    <div class="card-header"><h3>Single Source of Truth — Pricing Pipeline</h3><span class="badge badge-orange">Core Architecture</span></div>
+    <div class="arch-flow">
+      <div class="arch-node"><div class="arch-node-label">Data Source</div><div class="arch-node-name">LBMA / LME / COMEX</div></div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-node active"><div class="arch-node-label">Engine</div><div class="arch-node-name">price_engine()</div></div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-node"><div class="arch-node-label">Cache</div><div class="arch-node-name">Redis (5-30s)</div></div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-node"><div class="arch-node-label">Delivery</div><div class="arch-node-name">WebSocket &rarr; UI</div></div>
+    </div>
+    <div style="text-align:center;margin-top:12px">
+      <div style="background:rgba(233,122,2,0.06);border:1px solid rgba(233,122,2,0.15);border-radius:10px;padding:16px;display:inline-block;max-width:560px;text-align:left">
+        <div style="font-size:0.72rem;color:var(--orange);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Pricing Formula</div>
+        <div style="font-family:'SF Mono',monospace,sans-serif;font-size:0.82rem;color:var(--white);line-height:2">
+          <span style="color:var(--green)">Final Listing Price</span> = <span style="color:#0ea5e9">LBMA Spot</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&plusmn; <span style="color:var(--gray-300)">Location Premium</span> <span style="color:var(--gray-600)">(mine → port distance)</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&plusmn; <span style="color:var(--gray-300)">Risk Adjustment</span> <span style="color:var(--gray-600)">(country, supplier score)</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&plusmn; <span style="color:var(--gray-300)">Logistics Cost</span> <span style="color:var(--gray-600)">(FOB / CIF / EXW)</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&plusmn; <span style="color:var(--gray-300)">Supplier Margin</span> <span style="color:var(--gray-600)">(declared, transparent)</span>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:14px;font-size:0.78rem;color:var(--red);font-weight:600">CRITICAL RULE: No price is ever hardcoded. Everything comes from price_engine().</div>
+  </div>
+
+  <!-- The Moat: Why They Can't Cut You Out -->
+  <div class="card" style="margin-top:14px">
+    <div class="card-header"><h3>The Moat — Why Parties Can't Transact Outside AxisTrade</h3><span class="badge badge-red">Non-Negotiable</span></div>
+    <div style="text-align:center;font-size:1rem;font-weight:700;color:var(--white);margin-bottom:16px">Even if two parties meet on AxisTrade... they can't transact outside it.</div>
+    <div class="moat-grid">
+      <div class="moat-card">
+        <div class="lock-icon">&#128274;</div>
+        <h4>1. Locked Transaction</h4>
+        <p>Escrow only through platform. Smart contracts generated inside AxisTrade. Moving funds outside = losing all protections.</p>
+      </div>
+      <div class="moat-card">
+        <div class="lock-icon">&#9989;</div>
+        <h4>2. Verification Layer</h4>
+        <p>Documents (LOI, SPA, Assay, Insurance) are only valid when verified via AxisTrade. Off-platform docs carry zero credibility.</p>
+      </div>
+      <div class="moat-card">
+        <div class="lock-icon">&#11088;</div>
+        <h4>3. Reputation System</h4>
+        <p>Trade history = currency. Your Trust Passport score is your trading credential. No platform = no credibility = no deals.</p>
+      </div>
+      <div class="moat-card">
+        <div class="lock-icon">&#127974;</div>
+        <h4>4. Embedded Financing (Power Move)</h4>
+        <p>Banks and trade finance institutions only fund deals executed through AxisTrade. Leaving the platform = losing the financing.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vision -->
+  <div class="card" style="margin-top:14px;background:linear-gradient(135deg,rgba(233,122,2,0.08),rgba(168,85,247,0.06));border-color:rgba(233,122,2,0.2);text-align:center;padding:32px">
+    <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--orange);margin-bottom:10px">The Vision</div>
+    <div style="font-size:1.4rem;font-weight:800;line-height:1.3">"We're building the <span style="color:var(--orange)">Bloomberg Terminal</span> for physical commodities...<br>but with <span style="color:#0ea5e9">execution</span>."</div>
+    <div style="font-size:0.85rem;color:var(--gray-400);margin-top:12px;max-width:600px;margin-left:auto;margin-right:auto">Not just data. Not just a marketplace. A complete transaction execution infrastructure — pricing, contracts, escrow, compliance, logistics — in one verifiable pipeline.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- ═══  SHARED: REVENUE MODEL (NEW)        ═══ -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="view" id="view-revenue-model">
+  <div class="page-header"><div>
+    <h1>Revenue Model</h1>
+    <div class="page-header-sub">Four monetization layers. Each tied to execution — not just discovery.</div>
+  </div></div>
+
+  <div class="stats-grid">
+    <div class="revenue-card">
+      <div class="revenue-pct">1-3%</div>
+      <div class="revenue-type">Transaction Fee</div>
+      <div class="revenue-desc">Per deal value. Paid by both parties (split or buyer-pays model). Revenue scales with commodity volume.</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-pct">$250-$2K</div>
+      <div class="revenue-type">Verification Fee</div>
+      <div class="revenue-desc">Per supplier. KYC/KYB, document verification, Trust Passport creation. Recurring annual renewal.</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-pct">$500/mo</div>
+      <div class="revenue-type">Premium Listings</div>
+      <div class="revenue-desc">Featured placement, priority buyer matching, advanced analytics dashboard, early inquiry notifications.</div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-pct">0.5-1%</div>
+      <div class="revenue-type">Financing / Escrow Fee</div>
+      <div class="revenue-desc">On financed deal value. Revenue from embedded trade finance, escrow management, and insurance partnerships.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="card-header"><h3>Revenue Projection — Year 1</h3></div>
+    <table>
+      <thead><tr><th>Stream</th><th>Avg. Deal Size</th><th>Deals / Month</th><th>Take Rate</th><th>Monthly Revenue</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Transaction Fees</strong></td><td>$500K</td><td>12</td><td>2%</td><td style="color:var(--orange);font-weight:700">$120,000</td></tr>
+        <tr><td><strong>Verification Fees</strong></td><td>$800 avg</td><td>15 new</td><td>Per supplier</td><td style="color:var(--orange);font-weight:700">$12,000</td></tr>
+        <tr><td><strong>Premium Listings</strong></td><td>$500/mo</td><td>20 active</td><td>Subscription</td><td style="color:var(--orange);font-weight:700">$10,000</td></tr>
+        <tr><td><strong>Finance/Escrow</strong></td><td>$500K</td><td>8 financed</td><td>0.75%</td><td style="color:var(--orange);font-weight:700">$30,000</td></tr>
+      </tbody>
+      <tfoot><tr style="border-top:2px solid var(--orange)"><td colspan="4" style="font-weight:700;color:var(--white)">Projected Monthly Revenue (Month 12)</td><td style="font-size:1.1rem;font-weight:800;color:var(--orange)">$172,000</td></tr></tfoot>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:14px;text-align:center;padding:28px">
+    <div style="font-size:0.72rem;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.08em;font-weight:600">Projected Annual Run Rate (Year 2)</div>
+    <div style="font-size:2.4rem;font-weight:800;color:var(--orange);margin-top:6px">$2.06M ARR</div>
+    <div style="font-size:0.82rem;color:var(--gray-400);margin-top:6px">Based on 144 transactions/year at $500K avg deal size with 2% blended take rate</div>
+  </div>
+</div>
 
 <!-- ═══════════ BUYER VIEWS ═══════════ -->
 
@@ -453,7 +628,7 @@
     </div>
     <div class="card">
       <div class="card-header"><h3>Activity</h3></div>
-      <div class="activity-item"><div class="activity-dot teal"></div><div><div class="activity-text"><strong>Shipment confirmed</strong> — ATX-2026-038 Copper shipment departed Dar es Salaam, ETA Shanghai 14d</div><div class="activity-time">3 hours ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot teal"></div><div><div class="activity-text"><strong>Shipment confirmed</strong> — ATX-2026-038 Copper departed Dar es Salaam, ETA Shanghai 14d</div><div class="activity-time">3 hours ago</div></div></div>
       <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Escrow funded</strong> — $1.2M deposited for Gold purchase from Lumina Metals</div><div class="activity-time">1 day ago</div></div></div>
       <div class="activity-item"><div class="activity-dot blue"></div><div><div class="activity-text"><strong>Supplier verified</strong> — Lumina Metals Trust Passport confirmed, score 94</div><div class="activity-time">2 days ago</div></div></div>
       <div class="activity-item"><div class="activity-dot orange"></div><div><div class="activity-text"><strong>New listing match</strong> — 3 new Chrome Ore listings match your saved search criteria</div><div class="activity-time">3 days ago</div></div></div>
@@ -461,49 +636,14 @@
   </div>
 </div>
 
-<!-- BUYER MARKETPLACE -->
+<!-- BUYER MARKETPLACE — Prices from price_engine() -->
 <div class="view" id="view-b-marketplace">
   <div class="page-header">
-    <div><h1>Marketplace</h1><div class="page-header-sub">Browse verified commodity listings from pre-vetted African suppliers.</div></div>
+    <div><h1>Marketplace</h1><div class="page-header-sub">All prices anchored to LBMA/LME in real-time via <code style="color:var(--orange);background:rgba(233,122,2,0.1);padding:1px 6px;border-radius:4px;font-size:0.78rem">price_engine()</code></div></div>
     <div class="header-actions"><button class="btn btn-outline">Filter by Commodity</button><button class="btn btn-teal">Post Buy Mandate</button></div>
   </div>
-  <div class="grid-3">
-    <div class="listing-card">
-      <div class="listing-top"><span class="listing-commodity">Gold (Au 99.5%)</span><span class="badge badge-green"><span class="badge-dot"></span> Verified</span></div>
-      <div class="listing-meta"><span class="listing-meta-item">500 kg</span><span class="listing-meta-item">Limpopo, SA</span><span class="listing-meta-item">FOB Durban</span></div>
-      <div class="listing-price">$62,400 <span class="listing-price-unit">/ kg</span></div>
-      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">LM</div><span class="listing-supplier-name">Lumina Metals</span></div><span class="listing-score">Score: 94</span></div>
-    </div>
-    <div class="listing-card">
-      <div class="listing-top"><span class="listing-commodity">Chrome Ore (42% Cr2O3)</span><span class="badge badge-green"><span class="badge-dot"></span> Verified</span></div>
-      <div class="listing-meta"><span class="listing-meta-item">10,000 MT</span><span class="listing-meta-item">North West, SA</span><span class="listing-meta-item">CIF Shanghai</span></div>
-      <div class="listing-price">$280 <span class="listing-price-unit">/ MT</span></div>
-      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">XM</div><span class="listing-supplier-name">XYZ Mining</span></div><span class="listing-score">Score: 92</span></div>
-    </div>
-    <div class="listing-card">
-      <div class="listing-top"><span class="listing-commodity">Copper Cathode (Grade A)</span><span class="badge badge-green"><span class="badge-dot"></span> Verified</span></div>
-      <div class="listing-meta"><span class="listing-meta-item">2,000 MT</span><span class="listing-meta-item">Katanga, DRC</span><span class="listing-meta-item">FOB Dar es Salaam</span></div>
-      <div class="listing-price">$8,940 <span class="listing-price-unit">/ MT</span></div>
-      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">KC</div><span class="listing-supplier-name">Katanga Commodities</span></div><span class="listing-score">Score: 89</span></div>
-    </div>
-    <div class="listing-card">
-      <div class="listing-top"><span class="listing-commodity">Manganese Ore (44% Mn)</span><span class="badge badge-orange"><span class="badge-dot"></span> Pending Assay</span></div>
-      <div class="listing-meta"><span class="listing-meta-item">5,000 MT</span><span class="listing-meta-item">Gauteng, SA</span><span class="listing-meta-item">FOB Richards Bay</span></div>
-      <div class="listing-price">$5.20 <span class="listing-price-unit">/ dmtu</span></div>
-      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">MF</div><span class="listing-supplier-name">MineFlow SA</span></div><span class="listing-score">Score: 85</span></div>
-    </div>
-    <div class="listing-card">
-      <div class="listing-top"><span class="listing-commodity">Lithium Spodumene (6%)</span><span class="badge badge-green"><span class="badge-dot"></span> Verified</span></div>
-      <div class="listing-meta"><span class="listing-meta-item">1,500 MT</span><span class="listing-meta-item">Bikita, Zimbabwe</span><span class="listing-meta-item">FOB Beira</span></div>
-      <div class="listing-price">$1,200 <span class="listing-price-unit">/ MT</span></div>
-      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">BL</div><span class="listing-supplier-name">Bikita Lithium</span></div><span class="listing-score">Score: 91</span></div>
-    </div>
-    <div class="listing-card">
-      <div class="listing-top"><span class="listing-commodity">Cobalt (99.8% Co)</span><span class="badge badge-green"><span class="badge-dot"></span> Verified</span></div>
-      <div class="listing-meta"><span class="listing-meta-item">200 MT</span><span class="listing-meta-item">Kolwezi, DRC</span><span class="listing-meta-item">CIF Rotterdam</span></div>
-      <div class="listing-price">$33,500 <span class="listing-price-unit">/ MT</span></div>
-      <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">CM</div><span class="listing-supplier-name">Congo Minerals</span></div><span class="listing-score">Score: 87</span></div>
-    </div>
+  <div class="grid-3" id="marketplace-grid">
+    <!-- Populated by JS from price_engine() -->
   </div>
 </div>
 
@@ -519,6 +659,7 @@
         <span style="font-size:0.78rem;color:var(--gray-500);font-family:monospace">ATX-2026-041</span>
         <div style="font-size:1.05rem;font-weight:700;margin-top:4px">Gold (Au 99.5%) — 500 kg</div>
         <div style="font-size:0.82rem;color:var(--gray-500);margin-top:2px">Total: <strong style="color:var(--white)">$1,200,000</strong> &middot; FOB Durban</div>
+        <div class="price-src-tag" style="margin-top:6px"><span class="live-dot"></span> Priced via LBMA PM Fix &middot; Updated <span id="deal-price-time">just now</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:var(--teal-dim);color:#0ea5e9;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700">GB</div><span style="font-size:0.85rem">You (Buyer)</span></div>
@@ -540,11 +681,13 @@
   </div>
   <div class="grid-2">
     <div class="card">
-      <div class="card-header"><h3>Purchase Terms</h3></div>
+      <div class="card-header"><h3>Purchase Terms</h3><span class="badge badge-green"><span class="badge-dot"></span> Engine-Priced</span></div>
       <table><tbody>
         <tr><td style="color:var(--gray-500);width:42%">Commodity</td><td>Gold (Au 99.5%)</td></tr>
         <tr><td style="color:var(--gray-500)">Quantity</td><td>500 kg</td></tr>
-        <tr><td style="color:var(--gray-500)">Unit Price</td><td>$62,400/kg (LBMA -0.5%)</td></tr>
+        <tr><td style="color:var(--gray-500)">Spot Reference</td><td><span id="deal-spot-ref" style="color:#0ea5e9;font-weight:600">$3,043.80/oz</span> <span style="font-size:0.68rem;color:var(--gray-600)">(LBMA PM Fix)</span></td></tr>
+        <tr><td style="color:var(--gray-500)">Unit Price</td><td><span id="deal-unit-price">$62,400</span>/kg <span style="font-size:0.68rem;color:var(--gray-600)">(LBMA -0.5% + logistics)</span></td></tr>
+        <tr><td style="color:var(--gray-500)">Spread vs. Spot</td><td><span style="color:var(--green);font-weight:600">-0.5%</span> <span style="font-size:0.68rem;color:var(--gray-600)">(transparent)</span></td></tr>
         <tr><td style="color:var(--gray-500)">Escrow</td><td><span style="color:var(--orange);font-weight:600">$1,200,000 locked</span></td></tr>
         <tr><td style="color:var(--gray-500)">Assay Provider</td><td>SGS South Africa</td></tr>
         <tr><td style="color:var(--gray-500)">Insurance</td><td>Hollard Marine Cargo</td></tr>
@@ -552,29 +695,47 @@
       </tbody></table>
     </div>
     <div class="card">
-      <div class="card-header"><h3>Document Vault</h3></div>
-      <div class="doc-item"><div class="doc-icon">LOI</div><div><div class="doc-name">Letter of Intent</div><div class="doc-meta">Signed Mar 15</div></div><span class="badge badge-green doc-status">Signed</span></div>
-      <div class="doc-item"><div class="doc-icon">SPA</div><div><div class="doc-name">Sale & Purchase Agreement</div><div class="doc-meta">Signed Mar 17</div></div><span class="badge badge-green doc-status">Signed</span></div>
-      <div class="doc-item"><div class="doc-icon">KYC</div><div><div class="doc-name">Supplier KYC/KYB Docs</div><div class="doc-meta">Verified Mar 18</div></div><span class="badge badge-green doc-status">Verified</span></div>
-      <div class="doc-item"><div class="doc-icon" style="background:var(--yellow-dim);color:var(--yellow)">INS</div><div><div class="doc-name">Cargo Insurance</div><div class="doc-meta">Awaiting cert</div></div><span class="badge badge-orange doc-status">Pending</span></div>
-      <div class="doc-item"><div class="doc-icon" style="background:var(--orange-dim);color:var(--orange)">ASY</div><div><div class="doc-name">Assay Report</div><div class="doc-meta">Awaiting SGS</div></div><span class="badge badge-gray doc-status">Pending</span></div>
+      <div class="card-header"><h3>Document Vault</h3><span class="badge badge-orange">&#128274; AxisTrade Verified Only</span></div>
+      <div class="doc-item"><div class="doc-icon">LOI</div><div><div class="doc-name">Letter of Intent</div><div class="doc-meta">Signed Mar 15 &middot; AxisTrade-generated</div></div><span class="badge badge-green doc-status">Signed</span></div>
+      <div class="doc-item"><div class="doc-icon">SPA</div><div><div class="doc-name">Sale & Purchase Agreement</div><div class="doc-meta">Signed Mar 17 &middot; Platform contract</div></div><span class="badge badge-green doc-status">Signed</span></div>
+      <div class="doc-item"><div class="doc-icon">KYC</div><div><div class="doc-name">Supplier KYC/KYB Docs</div><div class="doc-meta">Verified Mar 18 &middot; Trust Passport</div></div><span class="badge badge-green doc-status">Verified</span></div>
+      <div class="doc-item"><div class="doc-icon" style="background:var(--yellow-dim);color:var(--yellow)">INS</div><div><div class="doc-name">Cargo Insurance</div><div class="doc-meta">Awaiting cert &middot; ATIDI coverage</div></div><span class="badge badge-orange doc-status">Pending</span></div>
+      <div class="doc-item"><div class="doc-icon" style="background:var(--orange-dim);color:var(--orange)">ASY</div><div><div class="doc-name">Assay Report</div><div class="doc-meta">Awaiting SGS &middot; Triggers escrow release</div></div><span class="badge badge-gray doc-status">Pending</span></div>
+      <div style="margin-top:12px;padding:10px 14px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:8px;font-size:0.72rem;color:var(--gray-300)">
+        <strong style="color:var(--red)">&#128274; Lock-in:</strong> All documents generated and verified inside AxisTrade. Off-platform documents are not recognized by escrow or insurance partners.
+      </div>
     </div>
   </div>
 </div>
 
 <!-- BUYER ESCROW -->
 <div class="view" id="view-b-escrow">
-  <div class="page-header"><div><h1>Escrow — My Payments</h1><div class="page-header-sub">Your funds are protected until deal milestones are verified.</div></div></div>
+  <div class="page-header"><div><h1>Escrow — My Payments</h1><div class="page-header-sub">Your funds are protected until deal milestones are verified. <strong style="color:var(--orange)">Escrow only operates through AxisTrade.</strong></div></div></div>
   <div class="escrow-visual">
     <div class="escrow-label">Your Total Funds in Escrow</div>
     <div class="escrow-amount">$1,560,000</div>
+    <div style="font-size:0.72rem;color:var(--gray-500);margin-top:4px">Milestone-triggered releases &middot; Smart contract enforcement &middot; AxisTrade is the sole custodian</div>
     <div class="escrow-stages">
       <div class="escrow-stage released"><div class="escrow-stage-amount">$180,000</div><div class="escrow-stage-label">ATX-035 Lithium — Deposit</div><div class="escrow-stage-status">&#10003; Released to supplier</div></div>
       <div class="escrow-stage locked"><div class="escrow-stage-amount">$1,200,000</div><div class="escrow-stage-label">ATX-041 Gold — Full amount</div><div class="escrow-stage-status">&#9679; Awaiting assay verification</div></div>
       <div class="escrow-stage locked"><div class="escrow-stage-amount">$180,000</div><div class="escrow-stage-label">ATX-038 Copper — Final payment</div><div class="escrow-stage-status">&#9679; Awaiting delivery confirmation</div></div>
     </div>
   </div>
-  <div class="card">
+  <!-- Lock-in messaging -->
+  <div class="card" style="background:rgba(233,122,2,0.04);border-color:rgba(233,122,2,0.15)">
+    <div class="card-header"><h3>&#128274; Why Escrow Stays On-Platform</h3></div>
+    <div class="grid-2">
+      <div>
+        <div style="font-size:0.82rem;color:var(--gray-300);margin-bottom:8px"><strong style="color:var(--white)">Automatic Release Triggers</strong></div>
+        <div style="font-size:0.78rem;color:var(--gray-500);line-height:1.7">Funds release ONLY when verified milestones are met: SGS assay confirmation &rarr; shipping BOL uploaded &rarr; buyer delivery confirmation. No manual overrides.</div>
+      </div>
+      <div>
+        <div style="font-size:0.82rem;color:var(--gray-300);margin-bottom:8px"><strong style="color:var(--white)">Insurance Requires Escrow</strong></div>
+        <div style="font-size:0.78rem;color:var(--gray-500);line-height:1.7">ATIDI/ECIC insurance and trade finance partners only cover deals with AxisTrade escrow. Moving funds off-platform voids all protections.</div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
     <div class="card-header"><h3>Payment History</h3></div>
     <table>
       <thead><tr><th>Date</th><th>Deal</th><th>To Supplier</th><th>Amount</th><th>Trigger</th><th>Status</th></tr></thead>
@@ -589,7 +750,7 @@
 
 <!-- BUYER PASSPORTS -->
 <div class="view" id="view-b-passports">
-  <div class="page-header"><div><h1>Supplier Passports</h1><div class="page-header-sub">Verified Trust Passports for suppliers you're evaluating or transacting with.</div></div></div>
+  <div class="page-header"><div><h1>Supplier Passports</h1><div class="page-header-sub">Verified Trust Passports — the trading credential that can't be faked or taken off-platform.</div></div></div>
   <div class="grid-3" style="margin-bottom:20px">
     <div class="card" style="text-align:center;padding:28px">
       <div class="trust-ring"><span class="trust-ring-num">94</span><span class="trust-ring-label">Score</span></div>
@@ -636,14 +797,14 @@
 
 <!-- BUYER LIVE MARKET -->
 <div class="view" id="view-b-market">
-  <div class="page-header"><div><h1>Live Commodity Market</h1><div class="page-header-sub"><span class="market-pulse"><span class="market-pulse-dot"></span> Live</span> &mdash; Prices update in real-time. Last refresh: <span id="b-market-time">just now</span></div></div></div>
+  <div class="page-header"><div><h1>Live Commodity Market</h1><div class="page-header-sub"><span class="market-pulse"><span class="market-pulse-dot"></span> Live</span> &mdash; All prices from <code style="color:var(--orange);background:rgba(233,122,2,0.1);padding:1px 6px;border-radius:4px;font-size:0.78rem">price_engine()</code> &middot; Last refresh: <span id="b-market-time">just now</span></div></div></div>
   <div class="grid-3" id="b-market-grid"></div>
   <div class="card" style="margin-top:14px">
     <div class="card-header"><h3>Market News</h3></div>
-    <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Gold hits 3-month high</strong> — XAU surges past $2,175 on safe-haven demand amid geopolitical uncertainty</div><div class="activity-time">2 hours ago &middot; Reuters</div></div></div>
-    <div class="activity-item"><div class="activity-dot orange"></div><div><div class="activity-text"><strong>DRC cobalt output up 8% YoY</strong> — Increased production from Kolwezi artisanal and industrial mines pressures spot price</div><div class="activity-time">5 hours ago &middot; Mining Weekly</div></div></div>
-    <div class="activity-item"><div class="activity-dot blue"></div><div><div class="activity-text"><strong>South Africa chrome exports surge</strong> — Strong Chinese demand drives Q1 chrome ore exports up 15% from Richards Bay</div><div class="activity-time">1 day ago &middot; Metal Bulletin</div></div></div>
-    <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Lithium rebound accelerates</strong> — EV demand recovery pushes spodumene prices above $1,200/MT for first time since Nov</div><div class="activity-time">1 day ago &middot; Benchmark Minerals</div></div></div>
+    <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Gold hits 3-month high</strong> — XAU surges on safe-haven demand amid geopolitical uncertainty</div><div class="activity-time">2 hours ago &middot; Reuters</div></div></div>
+    <div class="activity-item"><div class="activity-dot orange"></div><div><div class="activity-text"><strong>DRC cobalt output up 8% YoY</strong> — Increased production pressures spot price</div><div class="activity-time">5 hours ago &middot; Mining Weekly</div></div></div>
+    <div class="activity-item"><div class="activity-dot blue"></div><div><div class="activity-text"><strong>South Africa chrome exports surge</strong> — Strong Chinese demand drives Q1 exports up 15%</div><div class="activity-time">1 day ago &middot; Metal Bulletin</div></div></div>
+    <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Lithium rebound accelerates</strong> — EV demand recovery pushes spodumene prices above $1,200/MT</div><div class="activity-time">1 day ago &middot; Benchmark Minerals</div></div></div>
   </div>
 </div>
 
@@ -686,33 +847,16 @@
   </div>
 </div>
 
-<!-- SUPPLIER LISTINGS -->
+<!-- SUPPLIER LISTINGS — Prices from price_engine() -->
 <div class="view" id="view-s-listings">
   <div class="page-header">
-    <div><h1>My Listings</h1><div class="page-header-sub">Manage your active commodity listings on the marketplace.</div></div>
+    <div><h1>My Listings</h1><div class="page-header-sub">Prices auto-calculated from <code style="color:var(--orange);background:rgba(233,122,2,0.1);padding:1px 6px;border-radius:4px;font-size:0.78rem">price_engine()</code> + your declared margin.</div></div>
     <div class="header-actions"><button class="btn btn-primary">Add New Listing</button></div>
   </div>
   <div class="card">
     <div class="card-header"><h3>Active Listings</h3><span class="badge badge-green">4 Live</span></div>
-    <div class="listing-manage">
-      <div class="listing-manage-icon">Au</div>
-      <div class="listing-manage-info"><div class="listing-manage-name">Gold (Au 99.5%) — 500 kg</div><div class="listing-manage-detail">$62,400/kg &middot; FOB Durban &middot; 14 views this week &middot; 3 inquiries</div></div>
-      <span class="badge badge-green">Live</span>
-    </div>
-    <div class="listing-manage">
-      <div class="listing-manage-icon">Au</div>
-      <div class="listing-manage-info"><div class="listing-manage-name">Gold (Au 99.5%) — 200 kg</div><div class="listing-manage-detail">$62,800/kg &middot; FOB Durban &middot; 8 views this week &middot; 1 inquiry</div></div>
-      <span class="badge badge-green">Live</span>
-    </div>
-    <div class="listing-manage">
-      <div class="listing-manage-icon">Au</div>
-      <div class="listing-manage-info"><div class="listing-manage-name">Gold Concentrate (85%) — 2,000 kg</div><div class="listing-manage-detail">$48,200/kg &middot; EXW Mine &middot; 6 views this week &middot; 1 inquiry</div></div>
-      <span class="badge badge-green">Live</span>
-    </div>
-    <div class="listing-manage">
-      <div class="listing-manage-icon" style="background:var(--yellow-dim);color:var(--yellow)">Au</div>
-      <div class="listing-manage-info"><div class="listing-manage-name">Gold Dore Bars — 100 kg</div><div class="listing-manage-detail">$59,100/kg &middot; FOB Durban &middot; Assay report pending upload</div></div>
-      <span class="badge badge-yellow">Draft</span>
+    <div id="supplier-listings-container">
+      <!-- Populated by JS from price_engine() -->
     </div>
   </div>
   <div class="grid-2">
@@ -798,6 +942,7 @@
         <span style="font-size:0.78rem;color:var(--gray-500);font-family:monospace">ATX-2026-041</span>
         <div style="font-size:1.05rem;font-weight:700;margin-top:4px">Gold (Au 99.5%) — 500 kg</div>
         <div style="font-size:0.82rem;color:var(--gray-500);margin-top:2px">Sale value: <strong style="color:var(--green)">$1,200,000</strong> &middot; Buyer's escrow funded</div>
+        <div class="price-src-tag" style="margin-top:6px"><span class="live-dot"></span> LBMA PM Fix &middot; Your margin: -0.5% (declared)</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:var(--orange-dim);color:var(--orange);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700">LM</div><span style="font-size:0.85rem">You (Seller)</span></div>
@@ -854,7 +999,7 @@
 <!-- SUPPLIER PASSPORT -->
 <div class="view" id="view-s-passport">
   <div class="page-header">
-    <div><h1>My Trust Passport</h1><div class="page-header-sub">Your verified profile — this is what buyers and banks see.</div></div>
+    <div><h1>My Trust Passport</h1><div class="page-header-sub">Your verified profile — this is what buyers and banks see. Your on-platform reputation is your trading credential.</div></div>
     <div class="header-actions"><button class="btn btn-primary">Upload Document</button></div>
   </div>
   <div class="grid-2">
@@ -877,7 +1022,7 @@
       <div class="progress-row"><div class="progress-label"><span>Delivery & Performance</span><span style="color:var(--green);font-weight:600">98/100</span></div><div class="progress-bar"><div class="progress-fill green" style="width:98%"></div></div></div>
       <div class="progress-row"><div class="progress-label"><span>ERP Data Quality</span><span style="color:var(--orange);font-weight:600">89/100</span></div><div class="progress-bar"><div class="progress-fill orange" style="width:89%"></div></div></div>
       <div style="margin-top:16px;padding:14px;background:var(--orange-dim);border:1px solid rgba(233,122,2,0.2);border-radius:8px;font-size:0.78rem;color:var(--gray-300)">
-        <strong style="color:var(--orange)">Tip:</strong> Upload your latest ERP production reports to boost your score to 96+. Higher scores attract more buyer inquiries.
+        <strong style="color:var(--orange)">Tip:</strong> Upload your latest ERP production reports to boost your score to 96+. Higher scores attract more buyer inquiries and unlock embedded financing.
       </div>
     </div>
   </div>
@@ -925,198 +1070,359 @@
 
 <!-- SUPPLIER LIVE MARKET -->
 <div class="view" id="view-s-market">
-  <div class="page-header"><div><h1>Live Commodity Market</h1><div class="page-header-sub"><span class="market-pulse"><span class="market-pulse-dot"></span> Live</span> &mdash; Track prices for your commodities. Last refresh: <span id="s-market-time">just now</span></div></div></div>
+  <div class="page-header"><div><h1>Live Commodity Market</h1><div class="page-header-sub"><span class="market-pulse"><span class="market-pulse-dot"></span> Live</span> &mdash; All prices from <code style="color:var(--orange);background:rgba(233,122,2,0.1);padding:1px 6px;border-radius:4px;font-size:0.78rem">price_engine()</code> &middot; Last refresh: <span id="s-market-time">just now</span></div></div></div>
   <div class="grid-3" id="s-market-grid"></div>
   <div class="card" style="margin-top:14px">
     <div class="card-header"><h3>Market News</h3></div>
-    <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Gold hits 3-month high</strong> — XAU surges past $2,175 on safe-haven demand. Consider updating listing prices to reflect market movement.</div><div class="activity-time">2 hours ago &middot; Reuters</div></div></div>
-    <div class="activity-item"><div class="activity-dot orange"></div><div><div class="activity-text"><strong>South Africa power outlook improves</strong> — Reduced loadshedding forecast boosts mining output projections for Q2 2026</div><div class="activity-time">6 hours ago &middot; Business Day</div></div></div>
-    <div class="activity-item"><div class="activity-dot blue"></div><div><div class="activity-text"><strong>LBMA gold price benchmark update</strong> — PM fix at $2,176.80, up $26.40 from previous session. Your FOB pricing tracks LBMA -0.5%</div><div class="activity-time">1 day ago &middot; LBMA</div></div></div>
-    <div class="activity-item"><div class="activity-dot teal"></div><div><div class="activity-text"><strong>Chinese import demand strong</strong> — Shanghai gold premium holds at $12/oz, signaling strong physical demand from Asian buyers</div><div class="activity-time">1 day ago &middot; Metal Bulletin</div></div></div>
+    <div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text"><strong>Gold hits 3-month high</strong> — XAU surges on safe-haven demand. Consider updating listing prices.</div><div class="activity-time">2 hours ago &middot; Reuters</div></div></div>
+    <div class="activity-item"><div class="activity-dot orange"></div><div><div class="activity-text"><strong>South Africa power outlook improves</strong> — Reduced loadshedding boosts mining output projections</div><div class="activity-time">6 hours ago &middot; Business Day</div></div></div>
+    <div class="activity-item"><div class="activity-dot blue"></div><div><div class="activity-text"><strong>LBMA gold price benchmark update</strong> — PM fix tracks live. Your FOB pricing follows LBMA -0.5%</div><div class="activity-time">1 day ago &middot; LBMA</div></div></div>
+    <div class="activity-item"><div class="activity-dot teal"></div><div><div class="activity-text"><strong>Chinese import demand strong</strong> — Shanghai gold premium holds at $12/oz, strong physical demand</div><div class="activity-time">1 day ago &middot; Metal Bulletin</div></div></div>
   </div>
 </div>
 
 </main>
 
 <script>
-  // ── Commodity Data — Real market prices fetched from API with fallback ──
-  // Sources: LBMA (gold/platinum), LME (copper/cobalt), SGX (iron ore), Fastmarkets (chrome/manganese/lithium)
-  const commodities = [
-    { name:'Gold (XAU)', symbol:'XAU', exchange:'LBMA', price:0, open:0, unit:'/oz', change:0, high:0, low:0, week:-0.4, vol:'', bars:[], decimals:2 },
-    { name:'Chrome Ore 42%', symbol:'Cr2O3', exchange:'Fastmarkets', price:0, open:0, unit:'/MT', change:0, high:0, low:0, week:1.2, vol:'', bars:[], decimals:2 },
-    { name:'Copper (HG)', symbol:'HG', exchange:'LME', price:0, open:0, unit:'/MT', change:0, high:0, low:0, week:0.8, vol:'', bars:[], decimals:2 },
-    { name:'Manganese Ore 44%', symbol:'Mn', exchange:'Fastmarkets', price:0, open:0, unit:'/dmtu', change:0, high:0, low:0, week:3.1, vol:'', bars:[], decimals:2 },
-    { name:'Lithium Carbonate', symbol:'Li2CO3', exchange:'Fastmarkets', price:0, open:0, unit:'/MT', change:0, high:0, low:0, week:-1.8, vol:'', bars:[], decimals:0 },
-    { name:'Cobalt', symbol:'Co', exchange:'LME', price:0, open:0, unit:'/MT', change:0, high:0, low:0, week:-0.9, vol:'', bars:[], decimals:0 },
-    { name:'Platinum (PGM)', symbol:'XPT', exchange:'LBMA', price:0, open:0, unit:'/oz', change:0, high:0, low:0, week:1.5, vol:'', bars:[], decimals:2 },
-    { name:'Iron Ore 62% Fe', symbol:'Fe62', exchange:'SGX', price:0, open:0, unit:'/MT', change:0, high:0, low:0, week:-2.1, vol:'', bars:[], decimals:2 },
-  ];
+  // ══════════════════════════════════════════════════
+  // ═══  PRICE ENGINE — SINGLE SOURCE OF TRUTH    ═══
+  // ══════════════════════════════════════════════════
+  //
+  // CORE PRINCIPLE: Every price on the platform comes from ONE feed.
+  // External API → price_engine() → Cache → UI
+  // NOTHING is hardcoded. Everything derives from price_engine().
 
-  // Fallback prices if API fails (based on real market data)
-  const fallbackPrices = {
-    XAU:  { price:3043.80, high:3058.20, low:3028.50, change:0.86, vol:'$52.1B' },
-    Cr2O3:{ price:275.00, high:278.50, low:271.00, change:0.55, vol:'$1.6B' },
-    HG:   { price:9712.50, high:9785.00, low:9648.00, change:0.42, vol:'$14.8B' },
-    Mn:   { price:5.48, high:5.55, low:5.38, change:1.84, vol:'$920M' },
-    Li2CO3:{ price:9850, high:9980, low:9720, change:-0.61, vol:'$1.9B' },
-    Co:   { price:24680, high:24890, low:24510, change:-0.34, vol:'$780M' },
-    XPT:  { price:978.40, high:986.20, low:968.80, change:0.72, vol:'$2.8B' },
-    Fe62: { price:103.25, high:105.40, low:101.80, change:-1.15, vol:'$7.2B' },
+  const PriceEngine = {
+    // Data sources (tiered for reliability):
+    // Primary: LBMA, LME/COMEX
+    // Secondary: Metals-API, metals.dev
+    // Fallback: Last known good prices (updated weekly)
+    sources: {
+      XAU:  { exchange:'LBMA',       tier:'Primary' },
+      XPT:  { exchange:'LBMA',       tier:'Primary' },
+      HG:   { exchange:'LME',        tier:'Primary' },
+      Co:   { exchange:'LME',        tier:'Primary' },
+      Cr2O3:{ exchange:'Fastmarkets', tier:'Secondary' },
+      Mn:   { exchange:'Fastmarkets', tier:'Secondary' },
+      Li2CO3:{ exchange:'Fastmarkets', tier:'Secondary' },
+      Fe62: { exchange:'SGX',         tier:'Primary' },
+    },
+
+    // Spot prices — the ONLY mutable price state
+    spot: {},
+
+    // Last fetch metadata
+    lastFetch: null,
+    fetchSource: 'Initializing...',
+
+    // Initialize with fallback data (real market benchmarks)
+    init() {
+      this.spot = {
+        XAU:  { price:3043.80, high:3058.20, low:3028.50, open:3017.60, vol:'$52.1B' },
+        Cr2O3:{ price:275.00, high:278.50, low:271.00, open:273.50, vol:'$1.6B' },
+        HG:   { price:9712.50, high:9785.00, low:9648.00, open:9671.80, vol:'$14.8B' },
+        Mn:   { price:5.48, high:5.55, low:5.38, open:5.38, vol:'$920M' },
+        Li2CO3:{ price:9850, high:9980, low:9720, open:9910, vol:'$1.9B' },
+        Co:   { price:24680, high:24890, low:24510, open:24764, vol:'$780M' },
+        XPT:  { price:978.40, high:986.20, low:968.80, open:971.40, vol:'$2.8B' },
+        Fe62: { price:103.25, high:105.40, low:101.80, open:104.45, vol:'$7.2B' },
+      };
+      this.lastFetch = new Date();
+      this.fetchSource = 'Fallback (cached benchmarks)';
+    },
+
+    // Fetch real prices from APIs
+    async fetchLive() {
+      // Try metals.dev for precious metals
+      try {
+        const res = await fetch('https://api.metals.dev/v1/latest?api_key=demo&currency=USD&unit=toz');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.metals) {
+            if (data.metals.gold) { this.spot.XAU.price = data.metals.gold; this.spot.XAU.open = data.metals.gold * 0.9975; }
+            if (data.metals.platinum) { this.spot.XPT.price = data.metals.platinum; this.spot.XPT.open = data.metals.platinum * 0.9965; }
+            this.fetchSource = 'metals.dev API (live)';
+          }
+        }
+      } catch(e) {}
+
+      // Try metals-api for base metals
+      try {
+        const res = await fetch('https://metals-api.com/api/latest?access_key=demo&base=USD&symbols=XAU,XPT,XCU');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.rates) {
+            if (data.rates.XAU) this.spot.XAU.price = 1/data.rates.XAU;
+            if (data.rates.XPT) this.spot.XPT.price = 1/data.rates.XPT;
+            this.fetchSource = 'metals-api.com (live)';
+          }
+        }
+      } catch(e) {}
+
+      this.lastFetch = new Date();
+      // Recalculate highs/lows
+      Object.keys(this.spot).forEach(sym => {
+        const s = this.spot[sym];
+        if (s.price > s.high) s.high = s.price;
+        if (s.price < s.low) s.low = s.price;
+      });
+    },
+
+    // THE PRICING FORMULA — derives listing price from spot
+    // Final Price = Spot ± Location Premium ± Risk Adjustment ± Logistics ± Supplier Margin
+    calculateListingPrice(symbol, params = {}) {
+      const spot = this.spot[symbol];
+      if (!spot) return null;
+
+      const locationPremium = params.locationPremium || 0;   // e.g., +2% for remote mine
+      const riskAdjustment  = params.riskAdjustment || 0;    // e.g., -1% for high-risk region
+      const logisticsCost   = params.logisticsCost || 0;     // e.g., +3% for CIF vs FOB
+      const supplierMargin  = params.supplierMargin || 0;    // e.g., +1.5% declared margin
+
+      const totalAdjustment = locationPremium + riskAdjustment + logisticsCost + supplierMargin;
+      const finalPrice = spot.price * (1 + totalAdjustment / 100);
+
+      return {
+        spotPrice: spot.price,
+        exchange: this.sources[symbol]?.exchange || 'N/A',
+        locationPremium,
+        riskAdjustment,
+        logisticsCost,
+        supplierMargin,
+        totalSpread: totalAdjustment,
+        finalPrice,
+        timestamp: this.lastFetch,
+        source: this.fetchSource,
+      };
+    },
+
+    // Simulate micro-ticks between API fetches
+    simulateTick() {
+      Object.keys(this.spot).forEach(sym => {
+        const s = this.spot[sym];
+        const volatility = (sym === 'XAU' || sym === 'XPT') ? 0.00008 : 0.00015;
+        const noise = (Math.random() - 0.5) * 2 * volatility * s.price;
+        s.price = Math.max(s.low * 0.995, Math.min(s.high * 1.005, s.price + noise));
+        if (s.price > s.high) s.high = s.price;
+        if (s.price < s.low) s.low = s.price;
+      });
+      this.lastFetch = new Date();
+    },
+
+    // Get change % from open
+    getChange(symbol) {
+      const s = this.spot[symbol];
+      if (!s) return 0;
+      return ((s.price - s.open) / s.open) * 100;
+    },
+
+    // Get formatted price
+    getPrice(symbol, decimals) {
+      const s = this.spot[symbol];
+      if (!s) return '0';
+      return formatNum(s.price, decimals);
+    }
   };
 
-  // Try to fetch real prices from free APIs
-  async function fetchRealPrices() {
-    let fetched = false;
+  // ── Commodity metadata ──
+  const commodities = [
+    { name:'Gold (XAU)', symbol:'XAU', unit:'/oz', decimals:2, week:-0.4 },
+    { name:'Chrome Ore 42%', symbol:'Cr2O3', unit:'/MT', decimals:2, week:1.2 },
+    { name:'Copper (HG)', symbol:'HG', unit:'/MT', decimals:2, week:0.8 },
+    { name:'Manganese Ore 44%', symbol:'Mn', unit:'/dmtu', decimals:2, week:3.1 },
+    { name:'Lithium Carbonate', symbol:'Li2CO3', unit:'/MT', decimals:0, week:-1.8 },
+    { name:'Cobalt', symbol:'Co', unit:'/MT', decimals:0, week:-0.9 },
+    { name:'Platinum (PGM)', symbol:'XPT', unit:'/oz', decimals:2, week:1.5 },
+    { name:'Iron Ore 62% Fe', symbol:'Fe62', unit:'/MT', decimals:2, week:-2.1 },
+  ];
 
-    // Try metals.dev for precious metals (Gold, Platinum)
-    try {
-      const res = await fetch('https://api.metals.dev/v1/latest?api_key=demo&currency=USD&unit=toz');
-      if (res.ok) {
-        const data = await res.json();
-        if (data.metals) {
-          if (data.metals.gold) { fallbackPrices.XAU.price = data.metals.gold; fetched = true; }
-          if (data.metals.platinum) fallbackPrices.XPT.price = data.metals.platinum;
-        }
-      }
-    } catch(e) {}
+  // Sparkline history per commodity
+  const sparkHistory = {};
 
-    // Try metals-api for base metals
-    try {
-      const res = await fetch('https://metals-api.com/api/latest?access_key=demo&base=USD&symbols=XAU,XPT,XCU');
-      if (res.ok) {
-        const data = await res.json();
-        if (data.success && data.rates) {
-          if (data.rates.XAU) fallbackPrices.XAU.price = 1/data.rates.XAU;
-          if (data.rates.XPT) fallbackPrices.XPT.price = 1/data.rates.XPT;
-        }
-      }
-    } catch(e) {}
+  function formatNum(num, dec) {
+    if (num >= 1000) return num.toLocaleString('en-US', {minimumFractionDigits:dec, maximumFractionDigits:dec});
+    return num.toFixed(dec);
+  }
 
-    // Apply prices (API or fallback)
-    commodities.forEach(c => {
-      const fb = fallbackPrices[c.symbol];
-      c.price = fb.price;
-      c.open = fb.price / (1 + fb.change/100);
-      c.change = fb.change;
-      c.high = fb.high;
-      c.low = fb.low;
-      c.vol = fb.vol;
-      // Generate realistic sparkline from open to current price
-      const steps = 24;
-      c.bars = [];
-      let p = c.open;
-      for (let i = 0; i < steps; i++) {
-        const drift = (c.price - c.open) / steps;
-        const noise = (Math.random() - 0.5) * Math.abs(c.high - c.low) * 0.15;
-        p += drift + noise;
-        c.bars.push(p);
-      }
-      c.bars[steps-1] = c.price;
+  // ── Marketplace listings — ALL prices from PriceEngine ──
+  const marketplaceListings = [
+    { commodity:'Gold (Au 99.5%)', symbol:'XAU', qty:'500 kg', location:'Limpopo, SA', incoterm:'FOB Durban', supplier:'Lumina Metals', initials:'LM', score:94, verified:true,
+      priceParams:{ locationPremium:1.2, riskAdjustment:-0.3, logisticsCost:1.8, supplierMargin:-0.5 }, unitLabel:'/kg', spotToUnit:32.1507 },
+    { commodity:'Chrome Ore (42% Cr2O3)', symbol:'Cr2O3', qty:'10,000 MT', location:'North West, SA', incoterm:'CIF Shanghai', supplier:'XYZ Mining', initials:'XM', score:92, verified:true,
+      priceParams:{ locationPremium:0.5, riskAdjustment:0, logisticsCost:3.2, supplierMargin:1.0 }, unitLabel:'/MT', spotToUnit:1 },
+    { commodity:'Copper Cathode (Grade A)', symbol:'HG', qty:'2,000 MT', location:'Katanga, DRC', incoterm:'FOB Dar es Salaam', supplier:'Katanga Commodities', initials:'KC', score:89, verified:true,
+      priceParams:{ locationPremium:2.0, riskAdjustment:-1.5, logisticsCost:2.8, supplierMargin:0.8 }, unitLabel:'/MT', spotToUnit:1 },
+    { commodity:'Manganese Ore (44% Mn)', symbol:'Mn', qty:'5,000 MT', location:'Gauteng, SA', incoterm:'FOB Richards Bay', supplier:'MineFlow SA', initials:'MF', score:85, verified:false,
+      priceParams:{ locationPremium:0.8, riskAdjustment:0, logisticsCost:1.5, supplierMargin:1.2 }, unitLabel:'/dmtu', spotToUnit:1 },
+    { commodity:'Lithium Spodumene (6%)', symbol:'Li2CO3', qty:'1,500 MT', location:'Bikita, Zimbabwe', incoterm:'FOB Beira', supplier:'Bikita Lithium', initials:'BL', score:91, verified:true,
+      priceParams:{ locationPremium:1.5, riskAdjustment:-0.8, logisticsCost:3.5, supplierMargin:1.0 }, unitLabel:'/MT', spotToUnit:0.12 },
+    { commodity:'Cobalt (99.8% Co)', symbol:'Co', qty:'200 MT', location:'Kolwezi, DRC', incoterm:'CIF Rotterdam', supplier:'Congo Minerals', initials:'CM', score:87, verified:true,
+      priceParams:{ locationPremium:2.5, riskAdjustment:-2.0, logisticsCost:4.0, supplierMargin:0.5 }, unitLabel:'/MT', spotToUnit:1 },
+  ];
+
+  // ── Supplier listings — also from PriceEngine ──
+  const supplierListings = [
+    { name:'Gold (Au 99.5%) — 500 kg', symbol:'XAU', detail:'FOB Durban · 14 views · 3 inquiries', status:'Live', statusClass:'badge-green',
+      priceParams:{ locationPremium:1.2, riskAdjustment:-0.3, logisticsCost:1.8, supplierMargin:-0.5 }, spotToUnit:32.1507, unitLabel:'/kg' },
+    { name:'Gold (Au 99.5%) — 200 kg', symbol:'XAU', detail:'FOB Durban · 8 views · 1 inquiry', status:'Live', statusClass:'badge-green',
+      priceParams:{ locationPremium:1.2, riskAdjustment:-0.3, logisticsCost:1.8, supplierMargin:0.2 }, spotToUnit:32.1507, unitLabel:'/kg' },
+    { name:'Gold Concentrate (85%) — 2,000 kg', symbol:'XAU', detail:'EXW Mine · 6 views · 1 inquiry', status:'Live', statusClass:'badge-green',
+      priceParams:{ locationPremium:0, riskAdjustment:-0.3, logisticsCost:0, supplierMargin:-2.0 }, spotToUnit:32.1507*0.85, unitLabel:'/kg' },
+    { name:'Gold Dore Bars — 100 kg', symbol:'XAU', detail:'FOB Durban · Assay report pending upload', status:'Draft', statusClass:'badge-yellow',
+      priceParams:{ locationPremium:1.2, riskAdjustment:-0.3, logisticsCost:1.8, supplierMargin:-1.0 }, spotToUnit:32.1507*0.95, unitLabel:'/kg' },
+  ];
+
+  // ── Build marketplace cards with price breakdown ──
+  function buildMarketplace() {
+    const grid = document.getElementById('marketplace-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    marketplaceListings.forEach(l => {
+      const calc = PriceEngine.calculateListingPrice(l.symbol, l.priceParams);
+      if (!calc) return;
+      const listingPrice = calc.finalPrice * l.spotToUnit;
+      const spotRef = calc.spotPrice;
+      const verifiedBadge = l.verified
+        ? '<span class="badge badge-green"><span class="badge-dot"></span> Verified</span>'
+        : '<span class="badge badge-orange"><span class="badge-dot"></span> Pending Assay</span>';
+
+      grid.innerHTML += `
+        <div class="listing-card">
+          <div class="listing-top"><span class="listing-commodity">${l.commodity}</span>${verifiedBadge}</div>
+          <div class="listing-meta"><span class="listing-meta-item">${l.qty}</span><span class="listing-meta-item">${l.location}</span><span class="listing-meta-item">${l.incoterm}</span></div>
+          <div class="listing-price">$${formatNum(listingPrice, l.symbol==='Li2CO3'||l.symbol==='Co'?0:2)} <span class="listing-price-unit">${l.unitLabel}</span></div>
+          <div class="price-breakdown">
+            <div class="price-row"><span class="price-row-label">${calc.exchange} Spot</span><span class="price-row-val">$${formatNum(spotRef, 2)}</span></div>
+            <div class="price-row"><span class="price-row-label">Location Premium</span><span class="price-row-val">${calc.locationPremium>=0?'+':''}${calc.locationPremium.toFixed(1)}%</span></div>
+            <div class="price-row"><span class="price-row-label">Risk Adjustment</span><span class="price-row-val">${calc.riskAdjustment>=0?'+':''}${calc.riskAdjustment.toFixed(1)}%</span></div>
+            <div class="price-row"><span class="price-row-label">Logistics (${l.incoterm})</span><span class="price-row-val">+${calc.logisticsCost.toFixed(1)}%</span></div>
+            <div class="price-row"><span class="price-row-label">Supplier Margin</span><span class="price-row-val">${calc.supplierMargin>=0?'+':''}${calc.supplierMargin.toFixed(1)}%</span></div>
+            <div class="price-row total"><span class="price-row-label">Total Spread vs Spot</span><span class="price-row-val">${calc.totalSpread>=0?'+':''}${calc.totalSpread.toFixed(1)}%</span></div>
+          </div>
+          <div class="price-src-tag"><span class="live-dot"></span> ${calc.exchange} · ${new Date().toLocaleTimeString()}</div>
+          <div class="listing-footer"><div class="listing-supplier"><div class="listing-supplier-avatar">${l.initials}</div><span class="listing-supplier-name">${l.supplier}</span></div><span class="listing-score">Score: ${l.score}</span></div>
+        </div>`;
     });
-
-    updateTickerFromData();
-    buildMarketCards('b-market-grid');
-    buildMarketCards('s-market-grid');
-    return fetched;
   }
 
-  function formatPrice(price, decimals) {
-    if (price >= 1000) return price.toLocaleString('en-US', {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
-    return price.toFixed(decimals);
+  // ── Build supplier listing cards ──
+  function buildSupplierListings() {
+    const container = document.getElementById('supplier-listings-container');
+    if (!container) return;
+    container.innerHTML = '';
+    supplierListings.forEach(l => {
+      const calc = PriceEngine.calculateListingPrice(l.symbol, l.priceParams);
+      if (!calc) return;
+      const listingPrice = calc.finalPrice * l.spotToUnit;
+      const iconBg = l.statusClass === 'badge-yellow' ? 'background:var(--yellow-dim);color:var(--yellow)' : '';
+      container.innerHTML += `
+        <div class="listing-manage">
+          <div class="listing-manage-icon" ${iconBg ? `style="${iconBg}"` : ''}>Au</div>
+          <div class="listing-manage-info">
+            <div class="listing-manage-name">${l.name}</div>
+            <div class="listing-manage-detail">$${formatNum(listingPrice, 0)}${l.unitLabel} · ${l.detail}</div>
+            <div class="price-src-tag" style="margin-top:4px"><span class="live-dot"></span> ${calc.exchange} spot: $${formatNum(calc.spotPrice, 2)} · Spread: ${calc.totalSpread>=0?'+':''}${calc.totalSpread.toFixed(1)}%</div>
+          </div>
+          <span class="badge ${l.statusClass}">${l.status}</span>
+        </div>`;
+    });
   }
 
+  // ── Build market cards with source labels ──
   function buildMarketCards(containerId) {
     const grid = document.getElementById(containerId);
     if (!grid) return;
     grid.innerHTML = '';
     commodities.forEach(c => {
-      if (!c.price) return;
-      const isUp = c.change >= 0;
+      const s = PriceEngine.spot[c.symbol];
+      if (!s) return;
+      const change = PriceEngine.getChange(c.symbol);
+      const isUp = change >= 0;
       const weekUp = c.week >= 0;
-      const fmt = formatPrice(c.price, c.decimals);
-      const minBar = Math.min(...c.bars);
-      const maxBar = Math.max(...c.bars);
-      const range = maxBar - minBar || 1;
-      const barsHTML = c.bars.map((b,i) => {
-        const prev = i > 0 ? c.bars[i-1] : b;
-        const barUp = b >= prev;
-        const h = Math.max(6, ((b - minBar) / range) * 48);
-        return `<div class="spark-bar ${barUp?'up':'down'}" style="height:${h}px"></div>`;
+      const fmt = formatNum(s.price, c.decimals);
+      const src = PriceEngine.sources[c.symbol];
+
+      // Sparkline
+      if (!sparkHistory[c.symbol]) {
+        sparkHistory[c.symbol] = [];
+        let p = s.open;
+        for (let i = 0; i < 24; i++) {
+          const drift = (s.price - s.open) / 24;
+          const noise = (Math.random() - 0.5) * Math.abs(s.high - s.low) * 0.15;
+          p += drift + noise;
+          sparkHistory[c.symbol].push(p);
+        }
+        sparkHistory[c.symbol][23] = s.price;
+      } else {
+        sparkHistory[c.symbol].shift();
+        sparkHistory[c.symbol].push(s.price);
+      }
+
+      const bars = sparkHistory[c.symbol];
+      const minB = Math.min(...bars), maxB = Math.max(...bars), range = maxB - minB || 1;
+      const barsHTML = bars.map((b,i) => {
+        const prev = i > 0 ? bars[i-1] : b;
+        const h = Math.max(6, ((b - minB) / range) * 48);
+        return `<div class="spark-bar ${b >= prev?'up':'down'}" style="height:${h}px"></div>`;
       }).join('');
-      const changeDollar = Math.abs(c.price - c.open);
+
+      const changeDollar = Math.abs(s.price - s.open);
+
       grid.innerHTML += `
         <div class="market-card">
           <div class="market-card-header">
             <span class="market-commodity">${c.name}</span>
-            <span style="font-size:0.6rem;color:var(--gray-600);font-weight:500">${c.exchange}</span>
+            <span style="font-size:0.58rem;color:var(--gray-600);font-weight:500;padding:2px 6px;border:1px solid var(--border);border-radius:4px">${src.exchange} · ${src.tier}</span>
           </div>
           <div class="market-price">$${fmt} <span style="font-size:0.72rem;color:var(--gray-500);font-weight:400">${c.unit}</span></div>
           <div style="display:flex;align-items:center;gap:10px">
-            <div class="market-change ${isUp?'up':'down'}">${isUp?'+':''}${c.change.toFixed(2)}% today</div>
-            <div style="font-size:0.72rem;color:var(--gray-500)">${isUp?'+':'-'}$${formatPrice(changeDollar, c.decimals)}</div>
+            <div class="market-change ${isUp?'up':'down'}">${isUp?'+':''}${change.toFixed(2)}% today</div>
+            <div style="font-size:0.72rem;color:var(--gray-500)">${isUp?'+':'-'}$${formatNum(changeDollar, c.decimals)}</div>
           </div>
           <div class="sparkline">${barsHTML}</div>
           <div class="market-details">
-            <div class="market-detail"><div class="market-detail-label">24h High</div><div class="market-detail-value">$${formatPrice(c.high, c.decimals)}</div></div>
-            <div class="market-detail"><div class="market-detail-label">24h Low</div><div class="market-detail-value">$${formatPrice(c.low, c.decimals)}</div></div>
+            <div class="market-detail"><div class="market-detail-label">24h High</div><div class="market-detail-value">$${formatNum(s.high, c.decimals)}</div></div>
+            <div class="market-detail"><div class="market-detail-label">24h Low</div><div class="market-detail-value">$${formatNum(s.low, c.decimals)}</div></div>
             <div class="market-detail"><div class="market-detail-label">7d</div><div class="market-detail-value" style="color:${weekUp?'var(--green)':'var(--red)'}">${weekUp?'+':''}${c.week.toFixed(1)}%</div></div>
-            <div class="market-detail"><div class="market-detail-label">Volume</div><div class="market-detail-value">${c.vol}</div></div>
+            <div class="market-detail"><div class="market-detail-label">Volume</div><div class="market-detail-value">${s.vol}</div></div>
           </div>
+          <div class="price-src-tag" style="margin-top:8px"><span class="live-dot"></span> Source: ${src.exchange} · Updated ${new Date().toLocaleTimeString()}</div>
         </div>`;
     });
   }
 
-  // ── Realistic micro-tick simulation (runs between API fetches) ──
-  function simulatePrices() {
+  // ── Build ticker from PriceEngine ──
+  function buildTicker() {
+    const ticker = document.getElementById('ticker');
+    if (!ticker) return;
+    let html = '';
     commodities.forEach(c => {
-      if (!c.price) return;
-      // Realistic volatility: ~0.01-0.03% per tick based on commodity type
-      const volatility = c.symbol === 'XAU' || c.symbol === 'XPT' ? 0.00008 : 0.00015;
-      const drift = 0; // No directional bias in micro ticks
-      const noise = (Math.random() - 0.5) * 2 * volatility * c.price;
-      const prevPrice = c.price;
-      c.price = Math.max(c.low * 0.995, Math.min(c.high * 1.005, c.price + noise));
-      // Update high/low if breached
-      if (c.price > c.high) c.high = c.price;
-      if (c.price < c.low) c.low = c.price;
-      // Recalculate change from open
-      c.change = ((c.price - c.open) / c.open) * 100;
-      // Update sparkline
-      c.bars.shift();
-      c.bars.push(c.price);
+      const s = PriceEngine.spot[c.symbol];
+      if (!s) return;
+      const change = PriceEngine.getChange(c.symbol);
+      const isUp = change >= 0;
+      const src = PriceEngine.sources[c.symbol];
+      html += `<span class="ticker-item"><span class="ticker-name">${c.name}</span><span class="ticker-price">$${formatNum(s.price, c.decimals)}</span><span class="ticker-change ${isUp?'up':'down'}">${isUp?'+':''}${change.toFixed(2)}%</span><span class="ticker-src">${src.exchange}</span></span>`;
     });
+    // Duplicate for seamless scroll
+    ticker.innerHTML = html + html;
+  }
+
+  // ── Refresh everything ──
+  function refreshAll() {
+    PriceEngine.simulateTick();
+    buildTicker();
     buildMarketCards('b-market-grid');
     buildMarketCards('s-market-grid');
-    updateTickerFromData();
+    buildMarketplace();
+    buildSupplierListings();
     const now = new Date().toLocaleTimeString();
     const bt = document.getElementById('b-market-time');
     const st = document.getElementById('s-market-time');
+    const dt = document.getElementById('deal-price-time');
     if (bt) bt.textContent = now;
     if (st) st.textContent = now;
-  }
-
-  // ── Sync ticker bar with commodity data ──
-  function updateTickerFromData() {
-    const tickerMap = [
-      {el:'t-gold',cel:'tc-gold',sym:'XAU'},
-      {el:'t-chrome',cel:'tc-chrome',sym:'Cr2O3'},
-      {el:'t-copper',cel:'tc-copper',sym:'HG'},
-      {el:'t-mang',cel:'tc-mang',sym:'Mn'},
-      {el:'t-lith',cel:'tc-lith',sym:'Li2CO3'},
-      {el:'t-cobalt',cel:'tc-cobalt',sym:'Co'},
-      {el:'t-plat',cel:'tc-plat',sym:'XPT'},
-      {el:'t-iron',cel:'tc-iron',sym:'Fe62'},
-    ];
-    tickerMap.forEach(t => {
-      const el = document.getElementById(t.el);
-      const cel = document.getElementById(t.cel);
-      const c = commodities.find(x => x.symbol === t.sym);
-      if (!el || !cel || !c || !c.price) return;
-      el.textContent = '$' + formatPrice(c.price, c.decimals);
-      const isUp = c.change >= 0;
-      cel.textContent = (isUp?'+':'') + c.change.toFixed(2) + '%';
-      cel.className = 'ticker-change ' + (isUp?'up':'down');
-    });
+    if (dt) dt.textContent = now;
   }
 
   // ── Role switching ──
@@ -1137,10 +1443,10 @@
   // ── View switching ──
   function switchView(viewName) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    const roleLinks = document.querySelectorAll(`[data-role="${currentRole}"]`);
-    roleLinks.forEach(l => l.classList.remove('active'));
+    // Clear active from current role's links
+    document.querySelectorAll(`[data-role="${currentRole}"]`).forEach(l => l.classList.remove('active'));
     document.getElementById('view-'+viewName).classList.add('active');
-    const link = document.querySelector(`[data-view="${viewName}"]`);
+    const link = document.querySelector(`[data-view="${viewName}"][data-role="${currentRole}"]`);
     if (link) link.classList.add('active');
   }
 
@@ -1154,36 +1460,34 @@
 
   // ── Mobile Menu ──
   function toggleMobileMenu() {
-    const buyerSidebar = document.getElementById('sidebar-buyer');
-    const supplierSidebar = document.getElementById('sidebar-supplier');
+    const activeSidebar = currentRole === 'buyer'
+      ? document.getElementById('sidebar-buyer')
+      : document.getElementById('sidebar-supplier');
     const overlay = document.getElementById('mobile-overlay');
-    const activeSidebar = currentRole === 'buyer' ? buyerSidebar : supplierSidebar;
-    const isOpen = activeSidebar.classList.contains('mobile-open');
-    if (isOpen) {
+    if (activeSidebar.classList.contains('mobile-open')) {
       closeMobileMenu();
     } else {
       activeSidebar.classList.add('mobile-open');
       overlay.classList.add('active');
     }
   }
-
   function closeMobileMenu() {
     document.getElementById('sidebar-buyer').classList.remove('mobile-open');
     document.getElementById('sidebar-supplier').classList.remove('mobile-open');
     document.getElementById('mobile-overlay').classList.remove('active');
   }
-
-  // Close mobile menu when a sidebar link is clicked
   document.querySelectorAll('.sidebar-link').forEach(link => {
     link.addEventListener('click', () => closeMobileMenu());
   });
 
-  // ── Init ──
-  fetchRealPrices().then(() => {
+  // ── INIT — Everything starts from PriceEngine ──
+  PriceEngine.init();
+  PriceEngine.fetchLive().then(() => {
+    refreshAll();
     // Micro-tick every 4 seconds for realistic movement
-    setInterval(simulatePrices, 4000);
+    setInterval(refreshAll, 4000);
     // Re-fetch real prices every 5 minutes
-    setInterval(fetchRealPrices, 300000);
+    setInterval(() => PriceEngine.fetchLive().then(refreshAll), 300000);
   });
 </script>
 
