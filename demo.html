@@ -244,12 +244,40 @@
     .inquiry-body { font-size:0.82rem; color:var(--gray-300); margin-bottom:12px; line-height:1.6; }
     .inquiry-footer { display:flex; align-items:center; gap:10px; }
 
+    /* ── Mobile Menu Button ── */
+    .mobile-menu-btn {
+      display:none; position:fixed; bottom:20px; right:20px; z-index:1100;
+      width:52px; height:52px; border-radius:50%; border:none; cursor:pointer;
+      background:var(--orange); color:var(--white); box-shadow:0 4px 20px rgba(233,122,2,0.4);
+      font-size:1.2rem; align-items:center; justify-content:center;
+    }
+    .mobile-menu-btn svg { width:22px; height:22px; }
+    .mobile-overlay {
+      display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+      background:rgba(0,0,0,0.6); z-index:1050; backdrop-filter:blur(4px);
+    }
+    .mobile-overlay.active { display:block; }
+
     /* ── Responsive ── */
     @media (max-width:1024px) { .stats-grid{grid-template-columns:repeat(2,1fr)} .grid-2,.grid-3{grid-template-columns:1fr} .escrow-stages{grid-template-columns:1fr} }
-    @media (max-width:768px) { .sidebar{display:none} .main{margin-left:0} .stats-grid{grid-template-columns:1fr} .milestone-track{flex-direction:column;align-items:flex-start;gap:6px} .milestone-line{display:none} }
+    @media (max-width:768px) {
+      .sidebar { display:none; transition:transform 0.3s ease; }
+      .sidebar.mobile-open { display:flex; transform:translateX(0); z-index:1060; }
+      .main { margin-left:0; }
+      .stats-grid { grid-template-columns:1fr; }
+      .milestone-track { flex-direction:column; align-items:flex-start; gap:6px; }
+      .milestone-line { display:none; }
+      .mobile-menu-btn { display:flex; }
+    }
   </style>
 </head>
 <body>
+
+<!-- ═══ Mobile Menu ═══ -->
+<div class="mobile-overlay" id="mobile-overlay" onclick="closeMobileMenu()"></div>
+<button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileMenu()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect y="5" width="24" height="2" rx="1"/><rect y="11" width="24" height="2" rx="1"/><rect y="17" width="24" height="2" rx="1"/></svg>
+</button>
 
 <!-- ═══ Live Commodity Ticker ═══ -->
 <div class="ticker-bar">
@@ -1122,6 +1150,32 @@
       const view = link.getAttribute('data-view');
       if (view) switchView(view);
     });
+  });
+
+  // ── Mobile Menu ──
+  function toggleMobileMenu() {
+    const buyerSidebar = document.getElementById('sidebar-buyer');
+    const supplierSidebar = document.getElementById('sidebar-supplier');
+    const overlay = document.getElementById('mobile-overlay');
+    const activeSidebar = currentRole === 'buyer' ? buyerSidebar : supplierSidebar;
+    const isOpen = activeSidebar.classList.contains('mobile-open');
+    if (isOpen) {
+      closeMobileMenu();
+    } else {
+      activeSidebar.classList.add('mobile-open');
+      overlay.classList.add('active');
+    }
+  }
+
+  function closeMobileMenu() {
+    document.getElementById('sidebar-buyer').classList.remove('mobile-open');
+    document.getElementById('sidebar-supplier').classList.remove('mobile-open');
+    document.getElementById('mobile-overlay').classList.remove('active');
+  }
+
+  // Close mobile menu when a sidebar link is clicked
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    link.addEventListener('click', () => closeMobileMenu());
   });
 
   // ── Init ──
