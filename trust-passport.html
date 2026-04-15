@@ -380,7 +380,7 @@
 
   <div class="success-passport">
     <div class="success-passport-top">
-      <span class="success-badge">Pending Verification</span>
+      <span class="success-badge" id="verificationStatus">Pending Verification</span>
       <span class="success-atx-id" id="successAtxId">ATX-2026-???</span>
     </div>
     <div class="success-passport-body">
@@ -399,11 +399,10 @@
       </div>
       <div class="success-items">
         <div class="success-item"><div class="success-item-check">&#10003;</div> Application received</div>
-        <div class="success-item"><div class="success-item-pending">&#8987;</div> CIPC registration check</div>
-        <div class="success-item"><div class="success-item-pending">&#8987;</div> Document verification</div>
-        <div class="success-item" id="miningCheckItem" style="display:none"><div class="success-item-pending">&#8987;</div> Mining license validation</div>
-        <div class="success-item"><div class="success-item-pending">&#8987;</div> Trust Passport issued</div>
+        <div class="success-item" id="miningCheckItem" style="display:none"><div class="success-item-pending">&#8987;</div> Mining license uploaded</div>
       </div>
+      <!-- Live verification results injected here -->
+      <div id="verificationNotes" style="margin-top:14px;display:flex;flex-direction:column;gap:2px"></div>
     </div>
   </div>
 
@@ -554,11 +553,11 @@
 
     btn.textContent = 'Saving application...';
 
-    // Save to Supabase
+    // Save to Supabase — use return=representation to get the record ID back
     try {
       const res = await fetch(SUPABASE_URL + '/rest/v1/trust_passports', {
         method: 'POST',
-        headers: { ...SB_HEADERS, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        headers: { ...SB_HEADERS, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({
           atx_id: atxId,
           entity_type: selectedEntity,
@@ -576,7 +575,15 @@
       });
 
       if (res.ok || res.status === 201) {
+        const records = await res.json();
+        const passportId = records[0]?.id;
         showSuccess(atxId, companyName, contactEmail);
+
+        // Kick off auto-verification in the background
+        if (passportId) {
+          btn.textContent = 'Verifying documents...';
+          runAutoVerification(passportId);
+        }
       } else {
         const err = await res.json();
         console.error('Supabase error:', err);
@@ -589,6 +596,53 @@
       alert('Network error. Please try again.');
       btn.textContent = 'Submit Application →';
       btn.disabled = false;
+    }
+  }
+
+  // ── Auto-verification via Edge Function ──
+  async function runAutoVerification(passportId) {
+    const notesEl = document.getElementById('verificationNotes');
+    const statusEl = document.getElementById('verificationStatus');
+    const scoreEl = document.getElementById('successScore');
+    const scoreBarEl = document.getElementById('successScoreBar');
+
+    if (notesEl) notesEl.innerHTML = '<div style="color:var(--gray-400);font-size:0.78rem">Running document checks...</div>';
+
+    try {
+      const res = await fetch(SUPABASE_URL + '/functions/v1/verify-passport', {
+        method: 'POST',
+        headers: { ...SB_HEADERS, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passport_id: passportId })
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+
+        // Update trust score display
+        if (scoreEl) scoreEl.textContent = result.trust_score;
+        if (scoreBarEl) scoreBarEl.style.width = result.trust_score + '%';
+
+        // Update status badge
+        if (statusEl) {
+          const isAutoVerified = result.status === 'auto_verified';
+          statusEl.textContent = isAutoVerified ? 'Auto-Verified ✓' : 'Pending Review';
+          statusEl.style.background = isAutoVerified ? 'rgba(34,197,94,0.12)' : 'rgba(234,179,8,0.12)';
+          statusEl.style.color = isAutoVerified ? '#22c55e' : '#eab308';
+        }
+
+        // Show verification notes
+        if (notesEl && result.notes) {
+          notesEl.innerHTML = result.notes.map(note => {
+            const isPass = note.startsWith('✓');
+            const isFail = note.startsWith('✗');
+            const color = isPass ? '#22c55e' : isFail ? '#ef4444' : 'var(--gray-500)';
+            return `<div style="font-size:0.75rem;color:${color};padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04)">${note}</div>`;
+          }).join('');
+        }
+      }
+    } catch (e) {
+      console.error('Auto-verification error:', e);
+      if (notesEl) notesEl.innerHTML = '<div style="color:var(--gray-500);font-size:0.75rem">Auto-check unavailable — manual review in progress.</div>';
     }
   }
 
