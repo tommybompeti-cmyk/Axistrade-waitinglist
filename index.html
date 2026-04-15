@@ -408,6 +408,78 @@
     .footer-links a:hover { color: var(--white); }
     @media (max-width: 480px) { .footer-inner { flex-direction: column; gap: 16px; } }
 
+    /* ── Trust Passport CTA ── */
+    .passport-cta { border-top: 1px solid var(--border-light); }
+    .passport-cta-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch;
+    }
+    .passport-cta-card {
+      border-radius: 16px; padding: 40px 36px; display: flex; flex-direction: column; gap: 16px;
+    }
+    .passport-cta-card.get-verified {
+      background: linear-gradient(135deg, rgba(233,122,2,0.08), rgba(233,122,2,0.02));
+      border: 1px solid rgba(233,122,2,0.25);
+    }
+    .passport-cta-card.view-verified {
+      background: var(--charcoal-card); border: 1px solid var(--border);
+    }
+    .passport-cta-icon {
+      width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+    }
+    .passport-cta-card.get-verified .passport-cta-icon { background: var(--orange-dim); color: var(--orange); }
+    .passport-cta-card.view-verified .passport-cta-icon { background: var(--teal-dim); color: #0ea5e9; }
+    .passport-cta-card h3 { font-size: 1.2rem; font-weight: 700; margin: 0; }
+    .passport-cta-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin: 0; }
+    .passport-cta-btn {
+      display: inline-block; padding: 11px 24px; border-radius: 9px; font-size: 0.875rem;
+      font-weight: 600; text-decoration: none; transition: all 0.2s; align-self: flex-start; margin-top: auto;
+    }
+    .passport-cta-card.get-verified .passport-cta-btn {
+      background: var(--orange); color: var(--white); box-shadow: 0 0 20px rgba(233,122,2,0.25);
+    }
+    .passport-cta-card.get-verified .passport-cta-btn:hover { box-shadow: 0 0 30px rgba(233,122,2,0.4); }
+    .passport-cta-card.view-verified .passport-cta-btn {
+      background: transparent; color: var(--white); border: 1px solid var(--border);
+    }
+    .passport-cta-card.view-verified .passport-cta-btn:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.03); }
+    @media (max-width: 768px) { .passport-cta-inner { grid-template-columns: 1fr; } }
+
+    /* ── Verified Partners Directory ── */
+    .directory { border-top: 1px solid var(--border-light); }
+    .directory-header { text-align: center; margin-bottom: 48px; }
+    .directory-header h2 { margin-bottom: 12px; }
+    .directory-header .section-subtitle { margin: 0 auto; }
+    .directory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .directory-card {
+      background: var(--charcoal-card); border: 1px solid var(--border); border-radius: 14px; padding: 24px;
+    }
+    .directory-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .directory-avatar {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;
+    }
+    .directory-avatar.supplier-av { background: linear-gradient(135deg, #E97A02, #e69500); }
+    .directory-avatar.buyer-av { background: linear-gradient(135deg, var(--teal), #0ea5e9); }
+    .directory-company { font-size: 0.9rem; font-weight: 700; }
+    .directory-type { font-size: 0.72rem; color: var(--gray-500); margin-top: 2px; }
+    .directory-verified-badge {
+      margin-left: auto; display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(34,197,94,0.12); color: #22c55e;
+      padding: 3px 10px; border-radius: 100px; font-size: 0.65rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.04em; flex-shrink: 0;
+    }
+    .directory-score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .directory-score-pill {
+      background: var(--orange-dim); color: var(--orange); padding: 3px 10px;
+      border-radius: 100px; font-size: 0.72rem; font-weight: 700;
+    }
+    .directory-commodity { font-size: 0.75rem; color: var(--gray-400); }
+    .directory-country { font-size: 0.72rem; color: var(--gray-600); margin-top: 6px; }
+    .directory-empty { grid-column: 1/-1; text-align: center; padding: 48px; color: var(--gray-500); }
+    .directory-empty h3 { font-size: 1rem; margin-bottom: 8px; color: var(--gray-400); }
+    .directory-cta-row { text-align: center; margin-top: 32px; }
+    @media (max-width: 768px) { .directory-grid { grid-template-columns: 1fr; } }
+
     /* ── Positioning Banner ── */
     .positioning {
       border-top: 1px solid var(--border-light);
@@ -437,6 +509,7 @@
     <div class="nav-links">
       <a href="#problem">Problem</a>
       <a href="#ecosystem">Ecosystem</a>
+      <a href="#trust-passport">Trust Passport</a>
       <a href="#traction">Traction</a>
       <a href="#team">Team</a>
     </div>
@@ -448,6 +521,7 @@
   <div class="mobile-menu" id="mob-menu">
     <a href="#problem" onclick="document.getElementById('mob-menu').classList.remove('active')">Problem</a>
     <a href="#ecosystem" onclick="document.getElementById('mob-menu').classList.remove('active')">Ecosystem</a>
+    <a href="#trust-passport" onclick="document.getElementById('mob-menu').classList.remove('active')">Trust Passport</a>
     <a href="#traction" onclick="document.getElementById('mob-menu').classList.remove('active')">Traction</a>
     <a href="#team" onclick="document.getElementById('mob-menu').classList.remove('active')">Team</a>
     <a href="#waitlist" onclick="document.getElementById('mob-menu').classList.remove('active')">Join Waitlist</a>
@@ -830,6 +904,67 @@
   </div>
 </section>
 
+<!-- ════════════ TRUST PASSPORT CTA ════════════ -->
+<section class="passport-cta" id="trust-passport">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px">
+      <p class="section-label">Trust Passport</p>
+      <h2>Your verified trading identity.</h2>
+      <p class="section-subtitle" style="margin:0 auto">Get verified to unlock deals, or browse the directory of pre-vetted suppliers and buyers ready to transact.</p>
+    </div>
+    <div class="passport-cta-inner">
+      <div class="passport-cta-card get-verified">
+        <div class="passport-cta-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+        </div>
+        <h3>Get Verified</h3>
+        <p>Submit your company registration, CIPC certificate, and mining license. We verify your credentials and issue your AxisTrade Trust Passport — making you bank-ready and deal-ready.</p>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px">
+          <li style="font-size:0.82rem;color:var(--gray-300);display:flex;align-items:center;gap:8px"><span style="color:var(--orange);font-weight:700">✓</span> CIPC registration verified</li>
+          <li style="font-size:0.82rem;color:var(--gray-300);display:flex;align-items:center;gap:8px"><span style="color:var(--orange);font-weight:700">✓</span> Mining license validated</li>
+          <li style="font-size:0.82rem;color:var(--gray-300);display:flex;align-items:center;gap:8px"><span style="color:var(--orange);font-weight:700">✓</span> Trust score assigned (0–100)</li>
+          <li style="font-size:0.82rem;color:var(--gray-300);display:flex;align-items:center;gap:8px"><span style="color:var(--orange);font-weight:700">✓</span> Listed in verified directory</li>
+        </ul>
+        <a href="trust-passport.html" class="passport-cta-btn">Apply for Trust Passport &rarr;</a>
+      </div>
+      <div class="passport-cta-card view-verified">
+        <div class="passport-cta-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        <h3>View Vetted Partners</h3>
+        <p>Browse the growing directory of AxisTrade-verified suppliers and buyers. Every listing has been checked — CIPC registration confirmed, documents reviewed, and trust score assigned.</p>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px">
+          <li style="font-size:0.82rem;color:var(--gray-300);display:flex;align-items:center;gap:8px"><span style="color:#0ea5e9;font-weight:700">✓</span> Only verified entities listed</li>
+          <li style="font-size:0.82rem;color:var(--gray-300);display:flex;align-items:center;gap:8px"><span style="color:#0ea5e9;font-weight:700">✓</span> Trust score visible</li>
+          <li style="font-size:0.82rem;color:var(--gray-300);display:flex;align-items:center;gap:8px"><span style="color:#0ea5e9;font-weight:700">✓</span> Filtered by commodity &amp; country</li>
+          <li style="font-size:0.82rem;color:var(--gray-300);display:flex;align-items:center;gap:8px"><span style="color:#0ea5e9;font-weight:700">✓</span> Free to browse</li>
+        </ul>
+        <a href="#directory" class="passport-cta-btn">Browse Verified Directory &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ VERIFIED DIRECTORY ════════════ -->
+<section class="directory" id="directory">
+  <div class="container">
+    <div class="directory-header">
+      <p class="section-label">Verified Partners</p>
+      <h2>Pre-vetted. Bank-ready. Deal-ready.</h2>
+      <p class="section-subtitle">Every company below has been verified by the AxisTrade team — CIPC confirmed, documents reviewed, trust score assigned.</p>
+    </div>
+    <div class="directory-grid" id="directoryGrid">
+      <div class="directory-empty">
+        <h3>Verifications opening soon</h3>
+        <p>Be among the first verified partners on the platform. Apply now and get listed when we launch.</p>
+      </div>
+    </div>
+    <div class="directory-cta-row">
+      <a href="trust-passport.html" class="btn-primary" style="display:inline-block">Get Your Trust Passport &rarr;</a>
+    </div>
+  </div>
+</section>
+
 <!-- ════════════ WAITLIST FORM ════════════ -->
 <section class="waitlist" id="waitlist">
   <div class="container">
@@ -1033,6 +1168,41 @@
     });
   });
   observer.observe(counter);
+
+  // ── Load verified partners directory ──
+  async function loadDirectory() {
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/trust_passports?select=company_name,entity_type,country,commodity,trust_score&status=eq.verified&order=trust_score.desc&limit=6', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) return;
+      const grid = document.getElementById('directoryGrid');
+      const commodityNames = { gold:'Gold', copper:'Copper', iron_ore:'Iron Ore', manganese:'Manganese', chrome:'Chrome', coal:'Coal', lithium:'Lithium', cobalt:'Cobalt', platinum:'Platinum Group Metals', ppe_supplies:'PPE & Supplies', multiple:'Multiple', other:'Other' };
+      const countryNames = { ZA:'South Africa', ZW:'Zimbabwe', ZM:'Zambia', CD:'DRC', TZ:'Tanzania', GH:'Ghana', NG:'Nigeria', KE:'Kenya', BW:'Botswana', NA:'Namibia' };
+      grid.innerHTML = data.map(p => {
+        const initials = p.company_name.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+        const avClass = p.entity_type === 'supplier' ? 'supplier-av' : 'buyer-av';
+        const typeLabel = p.entity_type === 'supplier' ? 'Verified Supplier' : 'Verified Buyer';
+        return `<div class="directory-card">
+          <div class="directory-card-top">
+            <div class="directory-avatar ${avClass}">${initials}</div>
+            <div>
+              <div class="directory-company">${p.company_name}</div>
+              <div class="directory-type">${typeLabel}</div>
+            </div>
+            <span class="directory-verified-badge">&#10003; Verified</span>
+          </div>
+          <div class="directory-score-row">
+            <span class="directory-score-pill">Score ${p.trust_score}</span>
+            <span class="directory-commodity">${commodityNames[p.commodity] || p.commodity || '—'}</span>
+          </div>
+          <div class="directory-country">${countryNames[p.country] || p.country || ''}</div>
+        </div>`;
+      }).join('');
+    } catch (e) { /* silent fail — directory stays as empty state */ }
+  }
+  loadDirectory();
 
   // Form submission → Supabase
   document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
