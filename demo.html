@@ -49,6 +49,8 @@
     .role-btn { padding:8px 24px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; border:1px solid var(--border); background:transparent; color:var(--gray-400); transition:all 0.2s; font-family:inherit; }
     .role-btn.active-buyer { background:var(--teal-dim); color:#0ea5e9; border-color:rgba(7,80,115,0.5); }
     .role-btn.active-supplier { background:var(--orange-dim); color:var(--orange); border-color:rgba(233,122,2,0.4); }
+    .role-btn.active-investor { background:var(--purple-dim); color:var(--purple); border-color:rgba(168,85,247,0.4); }
+    .sidebar-avatar.investor-av { background:linear-gradient(135deg,#7e22ce,#a855f7); }
     .role-label { font-size:0.7rem; color:var(--gray-500); margin-right:8px; text-transform:uppercase; letter-spacing:0.08em; font-weight:600; }
 
     /* ── Sidebar ── */
@@ -384,6 +386,7 @@
   <span class="role-label">View as:</span>
   <button class="role-btn active-buyer" id="btn-buyer" onclick="switchRole('buyer')">Buyer</button>
   <button class="role-btn" id="btn-supplier" onclick="switchRole('supplier')">Supplier</button>
+  <button class="role-btn" id="btn-investor" onclick="switchRole('investor')">Investor</button>
 </div>
 
 <!-- ═════════════════════════════════ -->
@@ -501,6 +504,49 @@
     <div class="sidebar-user">
       <div class="sidebar-avatar supplier-av">LM</div>
       <div><div class="sidebar-user-name">Lumina Metals</div><div class="sidebar-user-role">Supplier &middot; Gold</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═════════════════════════════════ -->
+<!-- ═══    INVESTOR SIDEBAR       ═══ -->
+<!-- ═════════════════════════════════ -->
+<aside class="sidebar" id="sidebar-investor" style="display:none">
+  <a href="#" class="sidebar-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 438" fill="none" style="width:28px;height:20px;"><path d="M 424.258 190.157 A 146 146 0 1 1 314.843 80.742" stroke="#FFFFFF" stroke-width="44" stroke-linecap="butt"/><path d="M405 93 L358 107 L384 114 L388 139 Z" fill="#E97A02"/></svg>
+    AxisTrade
+  </a>
+  <div class="sidebar-section">Platform</div>
+  <a class="sidebar-link active" data-view="platform-overview" data-role="investor">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    Platform Overview
+  </a>
+  <div class="sidebar-section">Business Case</div>
+  <a class="sidebar-link" data-view="revenue-model" data-role="investor">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    Revenue Model
+  </a>
+  <div class="sidebar-section">Live Demo</div>
+  <a class="sidebar-link" data-view="b-marketplace" data-role="investor">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    Marketplace
+  </a>
+  <a class="sidebar-link" data-view="b-escrow" data-role="investor">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/></svg>
+    Escrow Engine
+  </a>
+  <a class="sidebar-link" data-view="b-passports" data-role="investor">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+    Trust Passports
+  </a>
+  <a class="sidebar-link" data-view="b-market" data-role="investor">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+    Live Market Data
+  </a>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar investor-av">INV</div>
+      <div><div class="sidebar-user-name">Investor View</div><div class="sidebar-user-role">Platform Overview</div></div>
     </div>
   </div>
 </aside>
@@ -1606,14 +1652,24 @@
     currentRole = role;
     document.getElementById('sidebar-buyer').style.display = role==='buyer' ? '' : 'none';
     document.getElementById('sidebar-supplier').style.display = role==='supplier' ? '' : 'none';
+    document.getElementById('sidebar-investor').style.display = role==='investor' ? '' : 'none';
     document.getElementById('btn-buyer').className = role==='buyer' ? 'role-btn active-buyer' : 'role-btn';
     document.getElementById('btn-supplier').className = role==='supplier' ? 'role-btn active-supplier' : 'role-btn';
+    document.getElementById('btn-investor').className = role==='investor' ? 'role-btn active-investor' : 'role-btn';
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-    const firstView = role==='buyer' ? 'b-dashboard' : 's-dashboard';
+    const firstView = role==='buyer' ? 'b-dashboard' : role==='supplier' ? 's-dashboard' : 'platform-overview';
     document.getElementById('view-'+firstView).classList.add('active');
-    document.querySelector(`[data-view="${firstView}"]`).classList.add('active');
+    const link = document.querySelector(`[data-view="${firstView}"][data-role="${role}"]`);
+    if (link) link.classList.add('active');
   }
+
+  // ── Auto-switch role from URL param ──
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role');
+    if (role === 'supplier' || role === 'investor') switchRole(role);
+  })();
 
   // ── View switching ──
   function switchView(viewName) {
@@ -1635,9 +1691,8 @@
 
   // ── Mobile Menu ──
   function toggleMobileMenu() {
-    const activeSidebar = currentRole === 'buyer'
-      ? document.getElementById('sidebar-buyer')
-      : document.getElementById('sidebar-supplier');
+    const sidebarId = currentRole === 'buyer' ? 'sidebar-buyer' : currentRole === 'supplier' ? 'sidebar-supplier' : 'sidebar-investor';
+    const activeSidebar = document.getElementById(sidebarId);
     const overlay = document.getElementById('mobile-overlay');
     if (activeSidebar.classList.contains('mobile-open')) {
       closeMobileMenu();
@@ -1649,6 +1704,7 @@
   function closeMobileMenu() {
     document.getElementById('sidebar-buyer').classList.remove('mobile-open');
     document.getElementById('sidebar-supplier').classList.remove('mobile-open');
+    document.getElementById('sidebar-investor').classList.remove('mobile-open');
     document.getElementById('mobile-overlay').classList.remove('active');
   }
   document.querySelectorAll('.sidebar-link').forEach(link => {
