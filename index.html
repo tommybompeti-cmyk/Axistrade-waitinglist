@@ -1059,10 +1059,11 @@
         counter.textContent = count;
       } else {
         const err = await res.json();
+        console.error('Supabase error:', err);
         if (err.code === '23505') {
           alert('This email is already on the waitlist!');
         } else {
-          alert('Something went wrong. Please try again.');
+          alert('Error: ' + (err.message || err.hint || JSON.stringify(err)));
         }
         btn.textContent = 'Join the Waitlist';
         btn.disabled = false;
